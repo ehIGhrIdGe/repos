@@ -1,0 +1,137 @@
+﻿１．Microsoft.AspNetCore.Mvc をインストール
+
+２．Startup.csのConfigureServicesメソッドを以下のように変更
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+　public void ConfigureServices(IServiceCollection services)
+{
+    services.AddMvc();
+}
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+
+３．Startup.cs ファイルのConfigureメソッドを以下のように変更し、Routeも合わせて登録。
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+{
+    //..省略
+ 
+    //削除してOK
+    //app.Run(async (context) =>
+    //{
+    //    await context.Response.WriteAsync("Hello World!");
+    //});
+ 
+    //↓追加
+    app.UseMvc(routes =>
+    {
+        routes.MapRoute(
+            name:"default",
+            template: "{controller=Chat}/{action=Index}/{id?}"
+            );
+    });
+}
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝　
+
+
+４．ルートに Contollers フォルダを追加
+
+５．Contollers に各種Controllerを追加。アクション名も書き換える。
+
+６．それぞれのViewも追加
+
+７．Views > Shared に _Layout.cshtml を追加（web/Razorレイアウト）
+
+８．Views に _ViewStart.cshtml を追加（web/Razorビューの開始）
+
+９．DBとの接続を行うモデルにpublic static string ConString { get; set; }のような
+　　接続文字列を保持するプロパティをセットしておく。
+
+１０．appsettings.jsonへ以下の通り、接続文字列を示す設定値を追加する。（例）
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝　
+{  
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+
+    "DefaultConnection": "Data Source=POWERSL-NOTE46; Initial Catalog=ChatApp; User ID=sa; Password=Pws12345"
+  }
+}
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝　　　
+
+
+１０．Startupクラスを以下のように修正
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝　　　
+public class Startup
+{
+    public Startup(IConfiguration configuration)
+    {
+        Configuration = configuration;
+    }
+ 
+    public IConfiguration Configuration { get; }
+ 
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddMvc();
+ 
+        //「ConnectionStrings」セクション専用のメソッド
+        （DBとの接続を行うモデル名). ConString = Configuration.GetConnectionString(“DefaultConnection”);
+    }
+    //以下略...
+}
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝　　　
+
+
+１１．プロジェクト直下に「wwwroot」フォルダを追加し、その中に「cssフォルダ」と「jsフォルダ」を作成
+
+１２．Startup.cs ファイルのConfigureメソッドを以下のように変更
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+{
+    ////省略
+ 
+    app.UseStaticFiles();　← ← ←ここ
+ 
+    app.UseMvc(routes =>
+    {
+        routes.MapRoute(
+            name: "default",
+            template: "{controller=Chat}/{action=Index}/{id?}"
+            );
+    });
+}
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+
+１３．Views に _ViewImports.cshtml を追加（web/Razorビューのインポート）
+
+１４．タグヘルパーの有効化。下記のコードを Views/_ViewImports.cshtml に追加。
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+
+
+　　　
+**Step1	「libmanを設定する」**
+１５．今回は、クライアントサイド検証に必要な以下3ファイルをインストール（ターゲットロケーションはwwwroot/lib/）
+・jquery
+	jquery.min.js
+・jquery-validate
+	jquery.validate.min.js
+・jquery-validation-unobtrusive
+	jquery.validate.unobtrusive.min.js
+
+
+１６．ソリューションエクスプローラーで libman.json を右クリックすると、ライブラリのクリーン及び復元。
+　　ビルドした際には自動で復元させるために「Microsoft.Web.LibraryManager.Build」というNugetパッケージをインストール。
+
+
+１７．インストールしたjsファイルは、レイアウトページ（_Layout.cshtml）で読み込んでおく
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+ @*..省略*@
+    <script src="~/lib/jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="~/lib/jquery-validate/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
+</body>
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
