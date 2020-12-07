@@ -6,7 +6,7 @@ namespace Sort
     {
         static void Main(string[] args)
         {
-            var strInt = "1 5 7 3 9 5";
+            var strInt = "1 5 7 3 9 5 3 1 66 3 294 13";
             var arrStrInt = strInt.Split(' ');
             var arrIntInt = new int[arrStrInt.Length];
 
@@ -15,12 +15,26 @@ namespace Sort
                 arrIntInt[i] = int.Parse(arrStrInt[i]);
             }
 
-            var result = Sort(arrIntInt);
+            //Sort(arrIntInt);
+            QuickSort(arrIntInt, false);
 
+            Console.WriteLine("↓↓昇順↓↓");
             foreach(var item in arrIntInt)
             {
-                Console.WriteLine(item);
+                Console.Write($"{item} ");
             }
+
+            QuickSort(arrIntInt, true);
+
+            Console.WriteLine();
+
+            Console.WriteLine("↓↓降順↓↓");
+            foreach (var item in arrIntInt)
+            {
+                Console.Write($"{item} ");
+            }
+
+            Console.WriteLine();
         }
 
         static int[] Sort(int[] in_arrayInt)
@@ -112,6 +126,146 @@ namespace Sort
             }
 
             return in_arrayInt;
+        }
+
+        private static void  QuickSort(int[] values, bool desc)
+        {
+            var strInt = "1 1 3 3 3 5 5 7 9 13 66 294";
+            if (values.Length > 1)
+            {
+                var p = 0;
+                var leftNum = 0;
+                var rightNum = values.Length - 1;
+
+                if (rightNum % 2 == 0)
+                {
+                    p = values[rightNum / 2];
+                }
+                else
+                {
+                    p = values[(rightNum + 1) / 2];
+                }
+
+                var chabgeFlag = false;
+
+                for (var i = leftNum; i < values.Length; i++)
+                { 
+                    if (values[i] >= p && !desc)
+                    {
+                        for (var x = rightNum; x >= 0; x--)
+                        {
+                            if (values[x] <= p)
+                            {
+                                if (i < x)
+                                {
+                                    var tempNum = values[x];
+                                    values[x] = values[i];
+                                    values[i] = tempNum;
+                                    rightNum = x - 1;
+                                    break;
+                                }
+                                else
+                                {
+                                    var tempValues1 = new int[i];
+                                    var tempValues2 = new int[values.Length - i];
+
+                                    for (var idx = 0; idx < values.Length; idx++)
+                                    {
+                                        if (idx < i)
+                                        {
+                                            tempValues1[idx] = values[idx];
+                                        }
+                                        else
+                                        {
+                                            tempValues2[idx - i] = values[idx];
+                                        }
+                                    }
+
+                                    QuickSort(tempValues1, desc);
+                                    QuickSort(tempValues2, desc);
+
+                                    for (var idx = 0; idx < values.Length; idx++)
+                                    {
+                                        if (idx < i)
+                                        {
+                                            values[idx] = tempValues1[idx];
+                                        }
+                                        else
+                                        {
+                                            values[idx] = tempValues2[idx - i];
+                                        }
+                                    }
+
+                                    chabgeFlag = true;
+                                }
+                            }
+                            if(chabgeFlag)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    else if (values[i] <= p && desc)
+                    {
+                        for (var x = rightNum; x >= 0; x--)
+                        {
+                            if (values[x] >= p)
+                            {
+                                if (i < x)
+                                {
+                                    var tempNum = values[x];
+                                    values[x] = values[i];
+                                    values[i] = tempNum;
+                                    rightNum = x - 1;
+                                    break;
+                                }
+                                else
+                                {
+                                    var tempValues1 = new int[i];
+                                    var tempValues2 = new int[values.Length - i];
+
+                                    for (var idx = 0; idx < values.Length; idx++)
+                                    {
+                                        if (idx < i)
+                                        {
+                                            tempValues1[idx] = values[idx];
+                                        }
+                                        else
+                                        {
+                                            tempValues2[idx - i] = values[idx];
+                                        }
+                                    }
+
+                                    QuickSort(tempValues1, desc);
+                                    QuickSort(tempValues2, desc);
+
+                                    for (var idx = 0; idx < values.Length; idx++)
+                                    {
+                                        if (idx < i)
+                                        {
+                                            values[idx] = tempValues1[idx];
+                                        }
+                                        else
+                                        {
+                                            values[idx] = tempValues2[idx - i];
+                                        }
+                                    }
+
+                                    chabgeFlag = true;
+                                }
+                            }
+                            if (chabgeFlag)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    if (chabgeFlag)
+                    {
+                        break;
+                    }
+                }
+            }
         }
     }
 }
