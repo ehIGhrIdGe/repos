@@ -6,6 +6,8 @@ namespace Shape
 {
     class Quandrilateral : Shape
     {
+        public override string Name { get { return this.GetType().Name; } }
+
         public Quandrilateral()
         {
             Width = 0;

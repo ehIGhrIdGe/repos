@@ -6,6 +6,7 @@ namespace Shape
 {
     class Triangle : Shape
     {
+        public override string Name { get { return this.GetType().Name; } }
         public Triangle()
         {
             Width = 0;

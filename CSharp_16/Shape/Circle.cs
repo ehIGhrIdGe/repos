@@ -6,6 +6,8 @@ namespace Shape
 {
     class Circle : Shape
     {
+        public override string Name { get { return this.GetType().Name; } }
+
         public Circle()
         {
             Radius = 0;
