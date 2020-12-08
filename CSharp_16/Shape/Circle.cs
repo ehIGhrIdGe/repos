@@ -7,6 +7,7 @@ namespace Shape
     class Circle : Shape
     {
         public override string Name { get { return this.GetType().Name; } }
+        public double Radius { get; set; }
 
         public Circle()
         {
@@ -20,7 +21,7 @@ namespace Shape
 
         public override double CalculateArea()
         {
-            return base.Area = Radius * Radius * 3.14;
+            return Radius * Radius * 3.14;
         }
     }
 }

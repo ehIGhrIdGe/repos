@@ -7,6 +7,9 @@ namespace Shape
     class Triangle : Shape
     {
         public override string Name { get { return this.GetType().Name; } }
+        public double Width { get; set; }
+        public double Height { get; set; }
+
         public Triangle()
         {
             Width = 0;
@@ -21,7 +24,7 @@ namespace Shape
 
         public override double CalculateArea()
         {
-            return base.Area = Width * Height / 2;
+            return Width * Height / 2;
         }
     }
 }
