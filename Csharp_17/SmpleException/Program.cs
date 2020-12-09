@@ -13,15 +13,36 @@ namespace SmpleException
                 var s = new GetFile.GetFile();
                 s.GetFileContents();
             }
-            catch(IOException e)
+            //catch(DirectoryNotFoundException e)
+            //{
+            //    Console.WriteLine($"[e.Message] => {e.Message}");
+            //    Console.WriteLine($"[e.InnerException] => {e.InnerException}");
+            //    Console.WriteLine($"[e.StackTrace] => {e.StackTrace}");
+            //    Console.WriteLine($"[e.ToString] => {e.ToString()}");
+            //}
+            //catch (FileNotFoundException e)
+            //{
+            //    Console.WriteLine($"[e.Message] => {e.Message}");
+            //    Console.WriteLine($"[e.InnerException] => {e.InnerException}");
+            //    Console.WriteLine($"[e.StackTrace] => {e.StackTrace}");
+            //    Console.WriteLine($"[e.ToString] => {e.ToString()}");
+            //}
+            //catch (IOException e)
+            //{
+            //    Console.WriteLine($"[e.Message] => {e.Message}");
+            //    Console.WriteLine($"[e.InnerException] => {e.InnerException}");
+            //    Console.WriteLine($"[e.StackTrace] => {e.StackTrace}");
+            //    Console.WriteLine($"[e.ToString] => {e.ToString()}");
+            //}
+            catch (Exception e)
             {
-                Console.WriteLine($"[e.Message] => {e.Message}");
+                Console.WriteLine();
+                Console.WriteLine($"[e.GetType().Name] => {e.GetType().Name}");
+                Console.WriteLine($"[e.Message]        => {e.Message}");
                 Console.WriteLine($"[e.InnerException] => {e.InnerException}");
-                Console.WriteLine($"[e.StackTrace] => {e.StackTrace}");
-                Console.WriteLine($"[e.ToString] => {e.ToString()}");
+                Console.WriteLine($"[e.StackTrace]     => {e.StackTrace}");
             }
-            
-            
+
         }
     }
 }

@@ -25,7 +25,19 @@ namespace SmpleException.GetFile
                     Console.WriteLine($"\n↓↓↓----ファイルの内容です----↓↓↓\n{text}");
                 }
             }
-            catch(IOException e)
+            catch(DirectoryNotFoundException)
+            {
+                throw;
+            }
+            catch(FileNotFoundException)
+            {
+                throw;
+            }
+            catch(IOException)
+            {
+                throw;
+            }
+            catch(Exception)
             {
                 throw;
             }
