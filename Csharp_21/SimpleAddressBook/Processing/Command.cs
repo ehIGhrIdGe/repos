@@ -7,7 +7,7 @@ namespace SimpleAddressBook.Processing
 {
     class Command
     {
-        public static void Execute(TextInfo textInfo)
+        public static void Execute(TextInfo textInfo, AddressInfo addressInfo)
         {
             try
             {
@@ -17,7 +17,7 @@ namespace SimpleAddressBook.Processing
                 }
                 else
                 {
-                    var addressInfo = new AddressInfo();                    
+                                        
                     switch (textInfo.Value)
                     {                        
                         case ":add":
@@ -70,6 +70,7 @@ namespace SimpleAddressBook.Processing
 
         /// <summary>
         /// 住所登録コマンド。入力内容のチェックとAddressInfo型への追加を同時に行う。
+        /// エラーの場合は textInfo.Value にエラーの内容が入ってくる。
         /// </summary>
         /// <param name="textInfo"></param>
         /// <param name="addressInfo"></param>
@@ -85,7 +86,13 @@ namespace SimpleAddressBook.Processing
             //入力した内容のチェック（電話番号が正しいか、住所が正しいか等）。
             TextEdit.Execute(textInfo);
 
-            //コマンドを実行            
+            //コマンドを実行 （textInfo.Valueに文字列が入っていなければ、実行）する。
+            if(string.IsNullOrWhiteSpace(textInfo.Value))
+            {
+                var x = addressInfo.AdsDictionary.Count;
+                addressInfo.AdsDictionary.Add(x + 1, textInfo.Values);
+            }
+
         }
 
         private static void CmList()

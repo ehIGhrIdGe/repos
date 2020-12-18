@@ -9,6 +9,7 @@ namespace SimpleAddressBook.Processing
     {
         public static void RunProcess()
         {
+            var addressInfo = new AddressInfo();
             try
             {
                 Console.Write("住所登録コンソールアプリです。");
