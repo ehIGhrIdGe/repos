@@ -10,7 +10,8 @@ namespace SimpleAddressBook.Property
         public int Age { get; private set; }
         public string PhoneNumber { get; private set; }
         public string Address { get; private set; }
-        public Dictionary<int,string[]> AdsDictionary { get; private set; }
+        //public Dictionary<int,string[]> AdsDictionary { get; private set; }
+        public List<string[]> AddressList { get; private set; }
 
         public AddressInfo()
         {
@@ -18,6 +19,7 @@ namespace SimpleAddressBook.Property
             Age = -1;
             PhoneNumber = "";
             Address = "";
+            AddressList = new List<string[]>();
         }
 
         public AddressInfo(string name, int age, string phoneNumber, string address)

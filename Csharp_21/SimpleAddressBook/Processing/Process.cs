@@ -28,7 +28,7 @@ namespace SimpleAddressBook.Processing
                     "コマンドを入力：");
 
                     var textInfo = new TextInfo(Console.ReadLine().Trim());
-                    Command.Execute(textInfo);
+                    Command.Execute(textInfo,addressInfo);
                 }                
             }
             catch(Exception)
