@@ -43,7 +43,7 @@ namespace SimpleAddressBook.Processing
         private static bool CheckText(TextInfo textInfo)
         {
             //↓↓↓↓この「addressInfoPropNum（AddressInfoのプロパティの数を数える）」のためだけにAddressInfoクラスに空のコンストラクターを搭載したけどそれはOKなのか？
-            var addressInfoPropNum = new AddressInfo().GetType().GetProperties().Length - 1;
+            var addressInfoPropNum = new AddressInfo().GetType().GetProperties().Length;
             var errorMsg = "";
             errorMsg = string.IsNullOrWhiteSpace(textInfo.Value) ? "エラーです。何も入力されていません。\n" :
                        textInfo.Values.Length < addressInfoPropNum ? "エラーです。入力内容が不足しています。\n" :

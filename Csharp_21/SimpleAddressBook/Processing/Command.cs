@@ -186,6 +186,8 @@ namespace SimpleAddressBook.Processing
                             });
                             break;
                     }
+
+                    Console.WriteLine("並び替えが完了しました。「:list」で確認してください。");
                 }
             }            
         }
