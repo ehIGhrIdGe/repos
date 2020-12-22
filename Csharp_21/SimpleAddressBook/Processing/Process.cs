@@ -10,6 +10,7 @@ namespace SimpleAddressBook.Processing
         public static void RunProcess()
         {
             var addressInfo = new AddressInfo();
+            var addressList = new List<AddressInfo>();
             try
             {
                 Console.Write("住所登録コンソールアプリです。");
@@ -28,7 +29,7 @@ namespace SimpleAddressBook.Processing
                     "コマンドを入力：");
 
                     var textInfo = new TextInfo(Console.ReadLine().Trim());
-                    Command.Execute(textInfo,addressInfo);
+                    Command.Execute(textInfo, addressList);
                 }                
             }
             catch(Exception)
