@@ -14,9 +14,22 @@ namespace SimpleMemo
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            try
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new Form1());
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show($"[GetType().Name]\n => {e.GetType().Name}\n\n" +
+                    $"[Message]        \n=> {e.Message}\n\n" +
+                    $"[StackTrace]     \n=> {e.StackTrace}\n\n" +
+                    $"[Source]         \n=> {e.Source}\n\n" +
+                    $"[InnerException] \n=> {e.InnerException}\n\n" +
+                    $"[TargetSite]     \n=> {e.TargetSite}\n\n");
+            }
+            
         }
     }
 }
