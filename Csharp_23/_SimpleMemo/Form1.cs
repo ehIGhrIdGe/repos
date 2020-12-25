@@ -309,10 +309,5 @@ namespace SimpleMemo
                 throw;
             }
         }
-
-        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            tabControl1.Controls.Add(tabPage1);
-        }
     }
 }

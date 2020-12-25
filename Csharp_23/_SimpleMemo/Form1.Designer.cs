@@ -44,13 +44,8 @@ namespace SimpleMemo
             this.btnSave = new System.Windows.Forms.ToolStripButton();
             this.btnReplace = new System.Windows.Forms.ToolStripButton();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
-            this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
             // saveFileDialog1
@@ -66,13 +61,12 @@ namespace SimpleMemo
             // 
             // menuStrip1
             // 
-            this.menuStrip1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuFile,
             this.menuEdit});
-            this.menuStrip1.Location = new System.Drawing.Point(3, 3);
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(670, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(684, 24);
             this.menuStrip1.TabIndex = 6;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -83,36 +77,35 @@ namespace SimpleMemo
             this.menuFileOpen,
             this.menuFileSave,
             this.menuFileSaveAs});
-            this.menuFile.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.menuFile.Name = "menuFile";
-            this.menuFile.Size = new System.Drawing.Size(70, 20);
+            this.menuFile.Size = new System.Drawing.Size(67, 20);
             this.menuFile.Text = "ファイル(&F)";
             // 
             // menuFileNew
             // 
             this.menuFileNew.Name = "menuFileNew";
-            this.menuFileNew.Size = new System.Drawing.Size(192, 22);
+            this.menuFileNew.Size = new System.Drawing.Size(186, 22);
             this.menuFileNew.Text = "新規作成(&N)";
             this.menuFileNew.Click += new System.EventHandler(this.menuFileNew_Click);
             // 
             // menuFileOpen
             // 
             this.menuFileOpen.Name = "menuFileOpen";
-            this.menuFileOpen.Size = new System.Drawing.Size(192, 22);
+            this.menuFileOpen.Size = new System.Drawing.Size(186, 22);
             this.menuFileOpen.Text = "開く(&O)...";
             this.menuFileOpen.Click += new System.EventHandler(this.menuFileOpen_Click);
             // 
             // menuFileSave
             // 
             this.menuFileSave.Name = "menuFileSave";
-            this.menuFileSave.Size = new System.Drawing.Size(192, 22);
+            this.menuFileSave.Size = new System.Drawing.Size(186, 22);
             this.menuFileSave.Text = "上書き保存(&S)";
             this.menuFileSave.Click += new System.EventHandler(this.menuFileSave_Click);
             // 
             // menuFileSaveAs
             // 
             this.menuFileSaveAs.Name = "menuFileSaveAs";
-            this.menuFileSaveAs.Size = new System.Drawing.Size(192, 22);
+            this.menuFileSaveAs.Size = new System.Drawing.Size(186, 22);
             this.menuFileSaveAs.Text = "名前を付けて保存(&A)...";
             this.menuFileSaveAs.Click += new System.EventHandler(this.menuFileSaveAs_Click);
             // 
@@ -120,46 +113,44 @@ namespace SimpleMemo
             // 
             this.menuEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuEditReplace});
-            this.menuEdit.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.menuEdit.Name = "menuEdit";
-            this.menuEdit.Size = new System.Drawing.Size(60, 20);
+            this.menuEdit.Size = new System.Drawing.Size(57, 20);
             this.menuEdit.Text = "編集(&E)";
             // 
             // menuEditReplace
             // 
             this.menuEditReplace.Name = "menuEditReplace";
-            this.menuEditReplace.Size = new System.Drawing.Size(180, 22);
+            this.menuEditReplace.Size = new System.Drawing.Size(98, 22);
             this.menuEditReplace.Text = "置換";
             this.menuEditReplace.Click += new System.EventHandler(this.toolStripEditMenuReplace_Click);
             // 
             // toolStrip1
             // 
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnSave,
             this.btnReplace});
-            this.toolStrip1.Location = new System.Drawing.Point(3, 27);
+            this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(670, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(176, 25);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
             // btnSave
             // 
-            this.btnSave.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.btnSave.Image = ((System.Drawing.Image)(resources.GetObject("btnSave.Image")));
             this.btnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(102, 22);
+            this.btnSave.Size = new System.Drawing.Size(98, 22);
             this.btnSave.Text = "上書き保存(&S)";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // btnReplace
             // 
-            this.btnReplace.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.btnReplace.Image = ((System.Drawing.Image)(resources.GetObject("btnReplace.Image")));
             this.btnReplace.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnReplace.Name = "btnReplace";
-            this.btnReplace.Size = new System.Drawing.Size(69, 22);
+            this.btnReplace.Size = new System.Drawing.Size(66, 22);
             this.btnReplace.Text = "置換(&R)";
             this.btnReplace.Click += new System.EventHandler(this.btnReplace_Click);
             // 
@@ -171,57 +162,24 @@ namespace SimpleMemo
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.BackColor = System.Drawing.SystemColors.Window;
             this.textBox1.HideSelection = false;
-            this.textBox1.Location = new System.Drawing.Point(-4, 53);
+            this.textBox1.Location = new System.Drawing.Point(0, 53);
             this.textBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox1.Size = new System.Drawing.Size(684, 514);
+            this.textBox1.Size = new System.Drawing.Size(690, 545);
             this.textBox1.TabIndex = 4;
             this.textBox1.WordWrap = false;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(684, 591);
-            this.tabControl1.TabIndex = 7;
-            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.BackColor = System.Drawing.Color.Transparent;
-            this.tabPage1.Controls.Add(this.toolStrip1);
-            this.tabPage1.Controls.Add(this.textBox1);
-            this.tabPage1.Controls.Add(this.menuStrip1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 24);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(676, 563);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 24);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(676, 563);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(684, 591);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.textBox1);
             this.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -233,10 +191,8 @@ namespace SimpleMemo
             this.menuStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -255,9 +211,6 @@ namespace SimpleMemo
         private System.Windows.Forms.ToolStripButton btnSave;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.ToolStripButton btnReplace;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
     }
 }
 
