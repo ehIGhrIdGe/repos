@@ -20,6 +20,36 @@ namespace SimpleMemo
             this.Owner = f1;
             InitializeComponent();
         }
+
+        private void ReplacementForm_Activated(object sender, EventArgs e)
+        {
+            //Form1 に直接 menuEditReplace ボタンを配置した場合は、直下のコードで動く
+            //var oTextBox1 = (TextBox)Owner.Controls["textBox1"];
+            //nextIndex = oTextBox1.SelectionStart;
+
+            //Form1 の tabControl1 内に menuEditReplace ボタンを配置した場合は、tabControl1 から textBox1 まで順にさかのぼっていかなくてはいけない
+            //var oTabControl = (TabControl)Owner.Controls["tabControl1"];
+            //var oTabPage1 = oTabControl.Controls["tabPage1"];            
+            //var oTextBox1 = (TextBox)oTabPage1.Controls["textBox1"];
+            //nextIndex = oTextBox1.SelectionStart;
+
+            //Form1 の tabControl1 に配置された UserControl の内の textBox1 を操作するためには以下のように記述する。
+            //デザインフォームで配置されている順番を追って、コントールを定義していく。
+            var oTabControl = (TabControl)Owner.Controls["tabControl1"];
+            var oTabPage = oTabControl.Controls[$"tabPage{(oTabControl.SelectedIndex + 1).ToString()}"].Controls["userControl1"].Controls["panel1"];
+            var oTextBox1 = (TextBox)oTabPage.Controls["textBox1"];
+            nextIndex = oTextBox1.SelectionStart;
+
+            ////ちなみに上記は以下のように記述しても同じ。
+            //var oTabControl = (TabControl)Owner.Controls["tabControl1"];
+            //var oTabPage = oTabControl.Controls[$"tabPage{(oTabControl.SelectedIndex + 1).ToString()}"];
+            //var oUserControl = oTabPage.Controls["userControl1"];
+            //var oPanel = oUserControl.Controls["panel1"];
+            //var oTextBox1 = (TextBox)oPanel.Controls["textBox1"];
+            //nextIndex = oTextBox1.SelectionStart;
+        }
+
+
         private void buttonNextFind_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(textBoxFindTxt.Text))
@@ -28,7 +58,9 @@ namespace SimpleMemo
             }
             else
             {
-                var oTextBox1 = (TextBox)Owner.Controls["textBox1"];
+                var oTabControl = (TabControl)Owner.Controls["tabControl1"];
+                var oTabPage = oTabControl.Controls[$"tabPage{(oTabControl.SelectedIndex + 1).ToString()}"].Controls["userControl1"].Controls["panel1"];
+                var oTextBox1 = (TextBox)oTabPage.Controls["textBox1"];
 
                 if (oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex) < 0)
                 {
@@ -49,21 +81,16 @@ namespace SimpleMemo
             }
             else
             {
-                var oTextBox1 = (TextBox)Owner.Controls["textBox1"];
-                //var oText = oTextBox1.Text;
-                //var fText = textBoxFindTxt.Text;
-                //var rText = textBoxReplaceTxt.Text;
-                //var sIndex = oText.IndexOf(fText, nextIndex);
+                var oTabControl = (TabControl)Owner.Controls["tabControl1"];
+                var oTabPage = oTabControl.Controls[$"tabPage{(oTabControl.SelectedIndex + 1).ToString()}"].Controls["userControl1"].Controls["panel1"];
+                var oTextBox1 = (TextBox)oTabPage.Controls["textBox1"];
 
-                if(oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex) < 0)
+                if (oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex) < 0)
                 {
                     MessageBox.Show($"\"{textBoxFindTxt.Text}\"が見つかりません。", "置換");
                 }
                 else
                 {
-                    //oText = oText.Remove(sIndex, fText.Length);
-                    //oTextBox1.Text = oText.Insert(sIndex, rText);
-
                     oTextBox1.Text = oTextBox1.Text.Insert(oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex), textBoxReplaceTxt.Text);
                     oTextBox1.Text = oTextBox1.Text.Remove(oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex), textBoxFindTxt.Text.Length);
 
@@ -86,7 +113,9 @@ namespace SimpleMemo
             }
             else
             {
-                var oTextBox1 = (TextBox)Owner.Controls["textBox1"];
+                var oTabControl = (TabControl)Owner.Controls["tabControl1"];
+                var oTabPage = oTabControl.Controls[$"tabPage{(oTabControl.SelectedIndex + 1).ToString()}"].Controls["userControl1"].Controls["panel1"];
+                var oTextBox1 = (TextBox)oTabPage.Controls["textBox1"];
                 var rFind = new Regex(textBoxFindTxt.Text);
                 var sReplace = textBoxReplaceTxt.Text;
 
@@ -98,12 +127,7 @@ namespace SimpleMemo
             Close();
         }
 
-        private void ReplacementForm_Activated(object sender, EventArgs e)
-        {
-            var oTextBox1 = (TextBox)Owner.Controls["textBox1"];
-            nextIndex = oTextBox1.SelectionStart;
-        }
-
+        
         private void ReplacementForm_Load(object sender, EventArgs e)
         {
             this.ActiveControl = this.textBoxFindTxt;
