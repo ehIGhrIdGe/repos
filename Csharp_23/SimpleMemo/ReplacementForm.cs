@@ -36,7 +36,8 @@ namespace SimpleMemo
             //Form1 の tabControl1 に配置された UserControl の内の textBox1 を操作するためには以下のように記述する。
             //デザインフォームで配置されている順番を追って、コントールを定義していく。
             var oTabControl = (TabControl)Owner.Controls["tabControl1"];
-            var oTabPage = oTabControl.Controls[$"tabPage{(oTabControl.SelectedIndex + 1).ToString()}"].Controls["userControl1"].Controls["panel1"];
+            var oTabPage = oTabControl.SelectedTab.Controls["userControl1"].Controls["panel1"];
+            //var oTabPage = oTabControl.Controls[$"tabPage{(oTabControl.SelectedIndex + 1).ToString()}"].Controls["userControl1"].Controls["panel1"];
             var oTextBox1 = (TextBox)oTabPage.Controls["textBox1"];
             nextIndex = oTextBox1.SelectionStart;
 
@@ -59,17 +60,33 @@ namespace SimpleMemo
             else
             {
                 var oTabControl = (TabControl)Owner.Controls["tabControl1"];
-                var oTabPage = oTabControl.Controls[$"tabPage{(oTabControl.SelectedIndex + 1).ToString()}"].Controls["userControl1"].Controls["panel1"];
+                var oTabPage = oTabControl.SelectedTab.Controls["userControl1"].Controls["panel1"];
                 var oTextBox1 = (TextBox)oTabPage.Controls["textBox1"];
 
-                if (oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex) < 0)
+
+                if(chkBox1.Checked != true)
                 {
-                    MessageBox.Show($"\"{textBoxFindTxt.Text}\"が見つかりません。", "検索");
+                    if (oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex, StringComparison.OrdinalIgnoreCase) < 0)
+                    {
+                        MessageBox.Show($"\"{textBoxFindTxt.Text}\"が見つかりません。", "検索");
+                    }
+                    else
+                    {
+                        oTextBox1.Select(oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex, StringComparison.OrdinalIgnoreCase), textBoxFindTxt.Text.Length);
+                        nextIndex = oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex, StringComparison.OrdinalIgnoreCase) + textBoxFindTxt.Text.Length;
+                    }
                 }
                 else
                 {
-                    oTextBox1.Select(oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex), textBoxFindTxt.Text.Length);
-                    nextIndex = oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex) + textBoxFindTxt.Text.Length;
+                    if (oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex, StringComparison.Ordinal) < 0)
+                    {
+                        MessageBox.Show($"\"{textBoxFindTxt.Text}\"が見つかりません。", "検索");
+                    }
+                    else
+                    {
+                        oTextBox1.Select(oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex, StringComparison.Ordinal), textBoxFindTxt.Text.Length);
+                        nextIndex = oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex, StringComparison.Ordinal) + textBoxFindTxt.Text.Length;
+                    }
                 }
             }
         }
@@ -82,7 +99,7 @@ namespace SimpleMemo
             else
             {
                 var oTabControl = (TabControl)Owner.Controls["tabControl1"];
-                var oTabPage = oTabControl.Controls[$"tabPage{(oTabControl.SelectedIndex + 1).ToString()}"].Controls["userControl1"].Controls["panel1"];
+                var oTabPage = oTabControl.SelectedTab.Controls["userControl1"].Controls["panel1"];
                 var oTextBox1 = (TextBox)oTabPage.Controls["textBox1"];
 
                 if (oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex) < 0)
@@ -91,17 +108,35 @@ namespace SimpleMemo
                 }
                 else
                 {
-                    oTextBox1.Text = oTextBox1.Text.Insert(oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex), textBoxReplaceTxt.Text);
-                    oTextBox1.Text = oTextBox1.Text.Remove(oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex), textBoxFindTxt.Text.Length);
-
-                    if(oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex) < 0)
+                    if(chkBox1.Checked != true)
                     {
-                        MessageBox.Show("置換が完了しました。", "置換");
+                        oTextBox1.Text = oTextBox1.Text.Insert(oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex, StringComparison.OrdinalIgnoreCase), textBoxReplaceTxt.Text);
+                        oTextBox1.Text = oTextBox1.Text.Remove(oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex, StringComparison.OrdinalIgnoreCase), textBoxFindTxt.Text.Length);
+
+                        if (oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex) < 0)
+                        {
+                            MessageBox.Show("置換が完了しました。", "置換");
+                        }
+                        else
+                        {
+                            oTextBox1.Select(oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex, StringComparison.OrdinalIgnoreCase), textBoxFindTxt.Text.Length);
+                        }
                     }
                     else
                     {
-                        oTextBox1.Select(oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex), textBoxFindTxt.Text.Length);
-                    }                    
+                        oTextBox1.Text = oTextBox1.Text.Insert(oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex, StringComparison.Ordinal), textBoxReplaceTxt.Text);
+                        oTextBox1.Text = oTextBox1.Text.Remove(oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex, StringComparison.Ordinal), textBoxFindTxt.Text.Length);
+
+                        if (oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex) < 0)
+                        {
+                            MessageBox.Show("置換が完了しました。", "置換");
+                        }
+                        else
+                        {
+                            oTextBox1.Select(oTextBox1.Text.IndexOf(textBoxFindTxt.Text, nextIndex, StringComparison.Ordinal), textBoxFindTxt.Text.Length);
+                        }
+                    }
+                                       
                 }
             }
         }
@@ -114,12 +149,19 @@ namespace SimpleMemo
             else
             {
                 var oTabControl = (TabControl)Owner.Controls["tabControl1"];
-                var oTabPage = oTabControl.Controls[$"tabPage{(oTabControl.SelectedIndex + 1).ToString()}"].Controls["userControl1"].Controls["panel1"];
+                var oTabPage = oTabControl.SelectedTab.Controls["userControl1"].Controls["panel1"];
                 var oTextBox1 = (TextBox)oTabPage.Controls["textBox1"];
-                var rFind = new Regex(textBoxFindTxt.Text);
-                var sReplace = textBoxReplaceTxt.Text;
 
-                oTextBox1.Text = rFind.Replace(oTextBox1.Text, sReplace);
+                if (chkBox1.Checked != true)
+                {
+                    oTextBox1.Text = Regex.Replace(oTextBox1.Text, textBoxFindTxt.Text, textBoxReplaceTxt.Text, RegexOptions.IgnoreCase);
+                }
+                else
+                {
+                    oTextBox1.Text = Regex.Replace(oTextBox1.Text, textBoxFindTxt.Text, textBoxReplaceTxt.Text);
+                }
+
+                
             }
         }
         private void buttonCancel_Click(object sender, EventArgs e)

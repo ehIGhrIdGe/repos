@@ -45,6 +45,7 @@ namespace SimpleMemo
             this.panel1 = new System.Windows.Forms.Panel();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.menuFileNewTab = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -64,7 +65,8 @@ namespace SimpleMemo
             this.menuFileNew,
             this.menuFileOpen,
             this.menuFileSave,
-            this.menuFileSaveAs});
+            this.menuFileSaveAs,
+            this.menuFileNewTab});
             resources.ApplyResources(this.menuFile, "menuFile");
             this.menuFile.Name = "menuFile";
             // 
@@ -151,6 +153,12 @@ namespace SimpleMemo
             this.openFileDialog1.FileName = "openFileDialog1";
             resources.ApplyResources(this.openFileDialog1, "openFileDialog1");
             // 
+            // menuFileNewTab
+            // 
+            this.menuFileNewTab.Name = "menuFileNewTab";
+            resources.ApplyResources(this.menuFileNewTab, "menuFileNewTab");
+            this.menuFileNewTab.Click += new System.EventHandler(this.menuFileNewTab_Click);
+            // 
             // UserControl1
             // 
             resources.ApplyResources(this, "$this");
@@ -187,5 +195,6 @@ namespace SimpleMemo
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.ToolStripMenuItem menuFileNewTab;
     }
 }

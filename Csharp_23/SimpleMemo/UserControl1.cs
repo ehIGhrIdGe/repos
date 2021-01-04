@@ -38,7 +38,6 @@ namespace SimpleMemo
         {
             var pForm = (Form1)this.ParentForm;
             var pTabControl = (TabControl)pForm.Controls["tabControl1"];
-            var pTabPage = pTabControl.Controls[$"tabPage{(pTabControl.SelectedIndex + 1).ToString()}"];
 
             if (Regex.IsMatch(pForm.Text, @"[\W\w]*\[編集中\]$"))
             {
@@ -53,17 +52,17 @@ namespace SimpleMemo
                     textBox1.Clear();
                     filePath = string.Empty;
                     fileName = string.Empty;
-                    pForm.Text = "簡易メモ帳-（無題）";
-                    pTabPage.Text = "簡易メモ帳-（無題）";
+                    pTabControl.SelectedTab.Text = "簡易メモ帳-（無題）";
+                    pForm.Text = pTabControl.SelectedTab.Text;
                 }
             }
             else
             {
                 textBox1.Clear();
                 filePath = string.Empty;
-                fileName = string.Empty;                
-                pForm.Text = "簡易メモ帳-（無題）";
-                pTabPage.Text = "簡易メモ帳-（無題）";
+                fileName = string.Empty;
+                pTabControl.SelectedTab.Text = "簡易メモ帳-（無題）";
+                pForm.Text = pTabControl.SelectedTab.Text;
             }
         }
 
@@ -71,7 +70,6 @@ namespace SimpleMemo
         {
             var pForm = (Form1)this.ParentForm;
             var pTabControl = (TabControl)pForm.Controls["tabControl1"];
-            var pTabPage = pTabControl.Controls[$"tabPage{(pTabControl.SelectedIndex + 1).ToString()}"];
 
             try
             {
@@ -95,8 +93,8 @@ namespace SimpleMemo
 
                                 filePath = openFileDialog1.FileName;
                                 fileName = Path.GetFileName(openFileDialog1.FileName);
-                                pForm.Text = $"{fileName} -簡易メモ帳";
-                                pTabPage.Text = $"{fileName} -簡易メモ帳";
+                                pTabControl.SelectedTab.Text = $"{fileName} -簡易メモ帳";
+                                pForm.Text = pTabControl.SelectedTab.Text;
                             }
                         }
                         /*SaveAsせず、開いているファイルが上書き保存可能である場合、自動的に上書き保存する機能を入れてたいときはコメントアウトを外す*/
@@ -121,8 +119,8 @@ namespace SimpleMemo
 
                             filePath = openFileDialog1.FileName;
                             fileName = Path.GetFileName(openFileDialog1.FileName);
-                            pForm.Text = $"{fileName} -簡易メモ帳";
-                            pTabPage.Text = $"{fileName} -簡易メモ帳";
+                            pTabControl.SelectedTab.Text = $"{fileName} -簡易メモ帳";
+                            pForm.Text = pTabControl.SelectedTab.Text;
                         }
                     }
                 }
@@ -137,8 +135,8 @@ namespace SimpleMemo
 
                         filePath = openFileDialog1.FileName;
                         fileName = Path.GetFileName(openFileDialog1.FileName);
-                        pForm.Text = $"{fileName} -簡易メモ帳";
-                        pTabPage.Text = $"{fileName} -簡易メモ帳";
+                        pTabControl.SelectedTab.Text = $"{fileName} -簡易メモ帳";
+                        pForm.Text = pTabControl.SelectedTab.Text;
                     }
                 }
             }
@@ -168,7 +166,6 @@ namespace SimpleMemo
         {
             var pForm = (Form1)this.ParentForm;
             var pTabControl = (TabControl)pForm.Controls["tabControl1"];
-            var pTabPage = pTabControl.Controls[$"tabPage{(pTabControl.SelectedIndex + 1).ToString()}"];
 
             try
             {
@@ -183,8 +180,8 @@ namespace SimpleMemo
                         writer.Write(textBox1.Text);
                     }
 
-                    pForm.Text = $"{fileName} -簡易メモ帳";
-                    pTabPage.Text = $"{fileName} -簡易メモ帳";
+                    pTabControl.SelectedTab.Text = $"{fileName} -簡易メモ帳";
+                    pForm.Text = pTabControl.SelectedTab.Text;
                 }
             }
             catch (EndOfStreamException)
@@ -213,7 +210,6 @@ namespace SimpleMemo
         {
             var pForm = (Form1)this.ParentForm;
             var pTabControl = (TabControl)pForm.Controls["tabControl1"];
-            var pTabPage = pTabControl.Controls[$"tabPage{(pTabControl.SelectedIndex + 1).ToString()}"];
 
             try
             {
@@ -228,8 +224,8 @@ namespace SimpleMemo
 
                     filePath = saveFileDialog1.FileName;
                     fileName = Path.GetFileName(saveFileDialog1.FileName);
-                    pForm.Text = $"{fileName} -簡易メモ帳";
-                    pTabPage.Text = $"{fileName} -簡易メモ帳";
+                    pTabControl.SelectedTab.Text = $"{fileName} -簡易メモ帳";
+                    pForm.Text = pTabControl.SelectedTab.Text;
                 }
             }
             catch (EndOfStreamException)
@@ -266,18 +262,31 @@ namespace SimpleMemo
         {
             var pForm = (Form1)this.ParentForm;
             var pTabControl = (TabControl)pForm.Controls["tabControl1"];
-            var pTabPage = pTabControl.Controls[$"tabPage{(pTabControl.SelectedIndex + 1).ToString()}"];
 
             if (string.IsNullOrEmpty(fileName))
             {
-                pForm.Text = $"簡易メモ帳-（無題）[編集中]";
-                pTabPage.Text = $"簡易メモ帳-（無題）[編集中]";
+                pTabControl.SelectedTab.Text = $"簡易メモ帳-（無題）[編集中]";
+                pForm.Text = pTabControl.SelectedTab.Text;                
             }
             else
             {
-                pForm.Text = $"{fileName} -簡易メモ帳 [編集中]";
-                pTabPage.Text = $"{fileName} -簡易メモ帳 [編集中]";
+                pTabControl.SelectedTab.Text = $"{fileName} -簡易メモ帳 [編集中]";
+                pForm.Text = pTabControl.SelectedTab.Text;
             }
+        }
+
+        private void menuFileNewTab_Click(object sender, EventArgs e)
+        {
+            var pForm = (Form1)this.ParentForm;            
+            var pTabControl = (TabControl)pForm.Controls["tabControl1"];
+            
+            pTabControl.TabPages.Add(new TabPage("簡易メモ帳-（無題）"));
+            pTabControl.SelectedIndex = pTabControl.TabCount - 1;
+
+            pTabControl.SelectedTab.Controls.Add(new UserControl1());
+            pTabControl.SelectedTab.Controls["UserControl1"].Anchor = AnchorStyles.Top| AnchorStyles.Bottom| AnchorStyles.Right| AnchorStyles.Left;
+            pTabControl.SelectedTab.Controls["UserControl1"].Size = new Size(468, 375);
+            pTabControl.SelectedTab.Controls["UserControl1"].Location = new Point(-4, 0);
         }
     }
 }

@@ -43,6 +43,11 @@ namespace SimpleMemo
             }
         }
 
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.Text = tabControl1.SelectedTab.Text;
+        }
+
         //private void textBox1_TextChanged(object sender, EventArgs e)
         //{
         //    if (string.IsNullOrEmpty(fileName))

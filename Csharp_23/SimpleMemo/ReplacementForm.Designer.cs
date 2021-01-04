@@ -40,6 +40,7 @@ namespace SimpleMemo
             this.textBoxReplaceTxt = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.chkBox1 = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -148,11 +149,22 @@ namespace SimpleMemo
             this.panel3.Size = new System.Drawing.Size(345, 25);
             this.panel3.TabIndex = 4;
             // 
+            // chkBox1
+            // 
+            this.chkBox1.AutoSize = true;
+            this.chkBox1.Location = new System.Drawing.Point(11, 85);
+            this.chkBox1.Name = "chkBox1";
+            this.chkBox1.Size = new System.Drawing.Size(139, 16);
+            this.chkBox1.TabIndex = 5;
+            this.chkBox1.Text = "文字の大きさを区別する";
+            this.chkBox1.UseVisualStyleBackColor = true;
+            // 
             // ReplacementForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(484, 131);
+            this.Controls.Add(this.chkBox1);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
@@ -167,6 +179,7 @@ namespace SimpleMemo
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -183,5 +196,6 @@ namespace SimpleMemo
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBoxReplaceTxt;
         private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.CheckBox chkBox1;
     }
 }

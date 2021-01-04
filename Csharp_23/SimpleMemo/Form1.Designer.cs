@@ -30,8 +30,8 @@ namespace SimpleMemo
         private void InitializeComponent()
         {
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.userControl1 = new SimpleMemo.UserControl1();
             this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.userControl1 = new SimpleMemo.UserControl1();
             this.tabPage1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.SuspendLayout();
@@ -47,17 +47,6 @@ namespace SimpleMemo
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "簡易メモ帳-（無題）";
             // 
-            // userControl1
-            // 
-            this.userControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.userControl1.Location = new System.Drawing.Point(-4, 0);
-            this.userControl1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.userControl1.Name = "userControl1";
-            this.userControl1.Size = new System.Drawing.Size(468, 375);
-            this.userControl1.TabIndex = 0;
-            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
@@ -67,9 +56,23 @@ namespace SimpleMemo
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(468, 399);
             this.tabControl1.TabIndex = 7;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
+            // 
+            // userControl1
+            // 
+            this.userControl1.AllowDrop = true;
+            this.userControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.userControl1.Location = new System.Drawing.Point(-4, 0);
+            this.userControl1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.userControl1.Name = "userControl1";
+            this.userControl1.Size = new System.Drawing.Size(468, 375);
+            this.userControl1.TabIndex = 0;
             // 
             // Form1
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(468, 399);
