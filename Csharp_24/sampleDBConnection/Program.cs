@@ -9,7 +9,12 @@ namespace sampleDBConnection
     {
         static void Main(string[] args)
         {
-            using (SqlConnection sqlConnection = new SqlConnection("Data Source=DESKTOP-LO22HNR;Initial Catalog=testdb;Integrated Security=True"))
+            var csBuilder = new SqlConnectionStringBuilder();
+            csBuilder.DataSource = "DESKTOP-LO22HNR";
+            csBuilder.InitialCatalog = "testdb";
+            csBuilder.IntegratedSecurity = true;
+
+            using (SqlConnection sqlConnection = new SqlConnection(csBuilder.ConnectionString))
             {
                 try
                 {
