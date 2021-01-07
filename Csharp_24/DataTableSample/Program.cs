@@ -27,7 +27,10 @@ namespace DataTableSample
                         //ExecuteReader()での結果をまず確認
                         using (var reader = cmd.ExecuteReader())
                         {
-                            
+                            while (reader.Read())
+                            {
+                                Console.WriteLine($"名前：{reader[1]}");
+                            }
                         }
 
                         using (var ada = new SqlDataAdapter())
@@ -41,7 +44,8 @@ namespace DataTableSample
 
                                 Console.WriteLine($"行数は{dt.Rows.Count}です。");
                                 Console.WriteLine($"列数は{dt.Columns.Count}です。");
-                                Console.WriteLine($"1行目第2項目は{dt.Rows[0][1].ToString().Trim()}です。");
+                                Console.WriteLine($"インデックス指定：1行目第2項目は{dt.Rows[0][1].ToString().Trim()}です。");
+                                Console.WriteLine($"列名を指定：1行目第2項目は{dt.Rows[0]["氏名"].ToString().Trim()}です。");
                             }
                         }
                     }
