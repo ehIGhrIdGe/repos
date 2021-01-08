@@ -47,78 +47,88 @@ namespace DataTableSample2
                 {
                     using (var cmd = new SqlCommand())
                     {
-                        cmd.Connection = sqlConnection;
-                        cmd.CommandText = @"SELECT * FROM Employee";
+                        //接続を開始（一度閉じるとトランザクションが無効になってしまうので、最後の処理まで開きっぱなしにする）
+                        Console.WriteLine("open");
+                        sqlConnection.Open();
+                        cmd.Connection = sqlConnection;                      
 
-                        using (var ada = new SqlDataAdapter())
+                        //トランザクションの開始
+                        var tra = sqlConnection.BeginTransaction();
+                        try
                         {
-                            ada.SelectCommand = cmd;
-
-                            using (var dt = new DataTable())
+                            using (var ada = new SqlDataAdapter())
                             {
-                                Console.WriteLine("open");
-                                sqlConnection.Open();
-                                ada.Fill(dt);
-                                sqlConnection.Close();
-                                Console.WriteLine("close");
+                                cmd.Transaction = tra;
+                                cmd.CommandText = @"SELECT * FROM Employee";
+                                ada.SelectCommand = cmd;
 
-                                //インサートするものを設定?
-                                var nRow = dt.NewRow();
-                                nRow[0] = 14;
-                                nRow["氏名"] = "gorge";
-                                nRow["給与"] = 999;
-                                dt.Rows.Add(nRow);
+                                using (var dt = new DataTable())
+                                {
+                                    //こことかで一回閉じて、ada.Update(dt); の直前に再度接続を開くと、tra.Commit(); の部分でエラーになる。
+                                    ada.Fill(dt);
 
-                                var nRow2 = dt.NewRow();
-                                nRow2[0] = 15;
-                                nRow2["氏名"] = "kono";
-                                nRow2["給与"] = 999;
-                                dt.Rows.Add(nRow2);
+                                    //インサートするものを設定（キー重複などでエラーを起こすことで、ロールバックできる）
+                                    var nRow = dt.NewRow();
+                                    nRow[0] = 1;
+                                    nRow["氏名"] = "yamayama";
+                                    nRow["給与"] = 9999999;
+                                    dt.Rows.Add(nRow);
 
-                                //更新するものを設定?
-                                dt.Rows[0][2] = 11111111;
+                                    var nRow2 = dt.NewRow();
+                                    nRow2[0] = 21;
+                                    nRow2["氏名"] = "momoguchi";
+                                    nRow2["給与"] = 222222222;
+                                    dt.Rows.Add(nRow2);
 
-                                //コマンドを自動的に発行
-                                var sqlBuilder = new SqlCommandBuilder();
-                                sqlBuilder.DataAdapter = ada;
-                                ada.InsertCommand = sqlBuilder.GetInsertCommand();
-                                ada.UpdateCommand = sqlBuilder.GetUpdateCommand();
+                                    //更新するものを設定
+                                    dt.Rows[0][2] = 99999999;
 
-                                //発行したコマンドの中身を確認
-                                Console.WriteLine("\n発行したコマンドの中身を確認");
-                                Console.WriteLine(ada.InsertCommand.CommandText.ToString());
-                                Console.WriteLine(ada.UpdateCommand.CommandText.ToString());
+                                    //コマンドを自動的に発行
+                                    var sqlBuilder = new SqlCommandBuilder();
+                                    sqlBuilder.DataAdapter = ada;
+                                    ada.InsertCommand = sqlBuilder.GetInsertCommand();
+                                    ada.UpdateCommand = sqlBuilder.GetUpdateCommand();
 
-                                //再接続し、DBに反映
-                                Console.WriteLine("\n再接続し、DBに反映");
-                                Console.WriteLine("re:opne");
-                                sqlConnection.Open();
-                                ada.Update(dt);
-                                sqlConnection.Close();
-                                Console.WriteLine("close");
+                                    //DBに反映
+                                    ada.Update(dt);
+                                    tra.Commit();
+                                    sqlConnection.Close();
+                                    Console.WriteLine("コミットしたよ。");
+                                    Console.WriteLine("close…");
 
+                                }
                             }
                         }
+                        catch (SqlException)
+                        {
+                            Console.WriteLine("ロールバックしちゃった。");
+                            tra.Rollback();                            
+                            throw;
+                        }
+                        catch (DirectoryNotFoundException)
+                        {
+                            throw;
+                        }
+                        catch (FileNotFoundException)
+                        {
+                            throw;
+                        }
+                        catch (IOException)
+                        {
+                            throw;
+                        }
+                        catch (Exception)
+                        {
+                            Console.WriteLine("ロールバックしちゃった。");
+                            tra.Rollback();                            
+                            throw;
+                        }                        
                     }
                 }
 
+
+
                 Console.ReadKey();
-            }
-            catch (SqlException)
-            {
-                throw;
-            }
-            catch (DirectoryNotFoundException)
-            {
-                throw;
-            }
-            catch (FileNotFoundException)
-            {
-                throw;
-            }
-            catch (IOException)
-            {
-                throw;
             }
             catch (Exception)
             {
@@ -137,7 +147,7 @@ namespace DataTableSample2
             try
             {
                 using (var sqlConnection = new SqlConnection(csBuilder.ConnectionString))
-                {                    
+                {
                     using (var cmd = new SqlCommand())
                     {
                         cmd.Connection = sqlConnection;
@@ -314,7 +324,7 @@ namespace DataTableSample2
                                 ada.Fill(dt);
                                 sqlConnection.Close();
 
-                                Console.WriteLine($"該当する社員は{dt.Rows.Count}名です。");;
+                                Console.WriteLine($"該当する社員は{dt.Rows.Count}名です。"); ;
                             }
                         }
                     }
@@ -432,6 +442,6 @@ namespace DataTableSample2
             {
                 throw;
             }
-        }        
+        }
     }
 }
