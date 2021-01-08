@@ -1,18 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.IO;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Configuration;
+using System.Collections.Specialized;
 
 namespace DataTableSample2
 {
     class Program
     {
         static void Main(string[] args)
-        {
+        {            
             try
             {
-                Lesson9();
+                Lesson10();
             }
             catch (SqlException e)
             {
@@ -31,9 +37,26 @@ namespace DataTableSample2
                 Console.WriteLine($"InnerException => {e.InnerException}");
                 Console.WriteLine($"TargetSite     => {e.TargetSite}");
             }
+
+            Console.ReadKey();
         }
 
-        //DataTableの操作
+        //アプリケーション構成ファイルのあれこれ
+        static void Lesson10()
+        {
+            //アプリケーション構成ファイルの読み込み
+            Console.WriteLine("アプリケーション構成ファイルの読み込み");
+            Console.WriteLine(Properties.Settings.Default["設定値1"].ToString());
+            Console.WriteLine(Properties.Settings.Default["設定値2"].ToString());
+            Console.WriteLine(Properties.Settings.Default["接続文字列1"].ToString());
+
+            //ConfigurationManager での読み込み
+            Console.WriteLine("\nConfigurationManager での読み込み");
+            var conStr = ConfigurationManager.ConnectionStrings["DataTableSample2.Properties.Settings.接続文字列1"].ConnectionString;
+            Console.WriteLine(conStr);            
+        }
+
+        //トランザクション処理
         static void Lesson9()
         {
             var csBuilder = new SqlConnectionStringBuilder();
@@ -50,7 +73,7 @@ namespace DataTableSample2
                         //接続を開始（一度閉じるとトランザクションが無効になってしまうので、最後の処理まで開きっぱなしにする）
                         Console.WriteLine("open");
                         sqlConnection.Open();
-                        cmd.Connection = sqlConnection;                      
+                        cmd.Connection = sqlConnection;
 
                         //トランザクションの開始
                         var tra = sqlConnection.BeginTransaction();
@@ -95,14 +118,13 @@ namespace DataTableSample2
                                     sqlConnection.Close();
                                     Console.WriteLine("コミットしたよ。");
                                     Console.WriteLine("close…");
-
                                 }
                             }
                         }
                         catch (SqlException)
                         {
                             Console.WriteLine("ロールバックしちゃった。");
-                            tra.Rollback();                            
+                            tra.Rollback();
                             throw;
                         }
                         catch (DirectoryNotFoundException)
@@ -120,14 +142,11 @@ namespace DataTableSample2
                         catch (Exception)
                         {
                             Console.WriteLine("ロールバックしちゃった。");
-                            tra.Rollback();                            
+                            tra.Rollback();
                             throw;
-                        }                        
+                        }
                     }
                 }
-
-
-
                 Console.ReadKey();
             }
             catch (Exception)
@@ -199,12 +218,10 @@ namespace DataTableSample2
                                 ada.Update(dt);
                                 sqlConnection.Close();
                                 Console.WriteLine("close");
-
                             }
                         }
                     }
                 }
-
                 Console.ReadKey();
             }
             catch (SqlException)
