@@ -11,10 +11,10 @@
     <Setting Name="接続文字列1" Type="(Connection string)" Scope="Application">
       <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;ConnectionString&gt;DataSource=DESKTOP-LO22HNR; InitialCatalog=testdb; IntegratedSecurity=true;&lt;/ConnectionString&gt;
+  &lt;ConnectionString&gt;Data Source=DESKTOP-LO22HNR; Initial Catalog=testdb; Integrated Security=true;&lt;/ConnectionString&gt;
   &lt;ProviderName&gt;using System.Data.SqlClient&lt;/ProviderName&gt;
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
-      <Value Profile="(Default)">DataSource=DESKTOP-LO22HNR; InitialCatalog=testdb; IntegratedSecurity=true;</Value>
+      <Value Profile="(Default)">Data Source=DESKTOP-LO22HNR; Initial Catalog=testdb; Integrated Security=true;</Value>
     </Setting>
   </Settings>
 </SettingsFile>

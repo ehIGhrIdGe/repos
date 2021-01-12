@@ -53,7 +53,14 @@ namespace DataTableSample2
             //ConfigurationManager での読み込み
             Console.WriteLine("\nConfigurationManager での読み込み");
             var conStr = ConfigurationManager.ConnectionStrings["DataTableSample2.Properties.Settings.接続文字列1"].ConnectionString;
-            Console.WriteLine(conStr);            
+            Console.WriteLine(conStr);
+
+            using (var cmd = new SqlConnection())
+            {
+                Console.WriteLine(cmd.ConnectionString);
+                cmd.ConnectionString = conStr;
+                Console.WriteLine(cmd.ConnectionString);              
+            }
         }
 
         //トランザクション処理

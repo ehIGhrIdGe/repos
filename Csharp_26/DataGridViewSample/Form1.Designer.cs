@@ -33,6 +33,7 @@ namespace DataGridViewSample
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colEdit = new System.Windows.Forms.DataGridViewButtonColumn();
             this.colDelete = new System.Windows.Forms.DataGridViewButtonColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -54,16 +55,18 @@ namespace DataGridViewSample
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Col1,
             this.Col2,
+            this.Col3,
             this.colEdit,
             this.colDelete});
-            this.dataGridView1.Location = new System.Drawing.Point(51, 98);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 12);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersWidth = 20;
             this.dataGridView1.RowTemplate.Height = 27;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(706, 150);
+            this.dataGridView1.Size = new System.Drawing.Size(804, 370);
             this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
             // Col1
             // 
@@ -82,6 +85,15 @@ namespace DataGridViewSample
             this.Col2.MinimumWidth = 8;
             this.Col2.Name = "Col2";
             this.Col2.ReadOnly = true;
+            // 
+            // Col3
+            // 
+            this.Col3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Col3.DataPropertyName = "部門名";
+            this.Col3.HeaderText = "部門";
+            this.Col3.MinimumWidth = 8;
+            this.Col3.Name = "Col3";
+            this.Col3.ReadOnly = true;
             // 
             // colEdit
             // 
@@ -107,7 +119,7 @@ namespace DataGridViewSample
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(828, 394);
             this.Controls.Add(this.dataGridView1);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -122,6 +134,7 @@ namespace DataGridViewSample
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col3;
         private System.Windows.Forms.DataGridViewButtonColumn colEdit;
         private System.Windows.Forms.DataGridViewButtonColumn colDelete;
     }

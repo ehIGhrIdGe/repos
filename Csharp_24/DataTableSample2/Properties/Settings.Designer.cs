@@ -44,7 +44,7 @@ namespace DataTableSample2.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("DataSource=DESKTOP-LO22HNR; InitialCatalog=testdb; IntegratedSecurity=true;")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=DESKTOP-LO22HNR; Initial Catalog=testdb; Integrated Security=true;")]
         public string 接続文字列1 {
             get {
                 return ((string)(this["接続文字列1"]));
