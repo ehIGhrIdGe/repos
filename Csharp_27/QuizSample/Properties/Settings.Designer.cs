@@ -27,9 +27,9 @@ namespace QuizSample.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=DESKTOP-LO22HNR; Initial Catalog=quiz_db; Integrated Security=True;")]
-        public string 接続文字列1 {
+        public string Quiz_Db {
             get {
-                return ((string)(this["接続文字列1"]));
+                return ((string)(this["Quiz_Db"]));
             }
         }
     }

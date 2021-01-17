@@ -29,16 +29,18 @@ namespace QuizSample
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label1 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.btnClose = new System.Windows.Forms.Button();
+            this.cbxCategory = new System.Windows.Forms.ComboBox();
+            this.btnNew = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
             this.ColQuizId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColCategoryName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColQuiestion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColEdit = new System.Windows.Forms.DataGridViewButtonColumn();
             this.ColDelete = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -54,14 +56,17 @@ namespace QuizSample
             // 
             // dataGridView1
             // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Meiryo UI", 8.25F);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AllowUserToResizeRows = false;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Meiryo UI", 8.25F);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColQuizId,
@@ -77,6 +82,7 @@ namespace QuizSample
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(653, 245);
             this.dataGridView1.TabIndex = 1;
+            this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
             // btnClose
             // 
@@ -88,17 +94,46 @@ namespace QuizSample
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
+            // cbxCategory
+            // 
+            this.cbxCategory.FormattingEnabled = true;
+            this.cbxCategory.Location = new System.Drawing.Point(13, 44);
+            this.cbxCategory.Name = "cbxCategory";
+            this.cbxCategory.Size = new System.Drawing.Size(121, 30);
+            this.cbxCategory.TabIndex = 3;
+            this.cbxCategory.SelectedIndexChanged += new System.EventHandler(this.cbxCategory_SelectedIndexChanged);
+            // 
+            // btnNew
+            // 
+            this.btnNew.Location = new System.Drawing.Point(566, 44);
+            this.btnNew.Name = "btnNew";
+            this.btnNew.Size = new System.Drawing.Size(100, 30);
+            this.btnNew.TabIndex = 4;
+            this.btnNew.Text = "新規登録";
+            this.btnNew.UseVisualStyleBackColor = true;
+            this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 19);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(58, 22);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "カテゴリ";
+            // 
             // ColQuizId
             // 
             this.ColQuizId.DataPropertyName = "quiz_id";
             this.ColQuizId.HeaderText = "ID";
             this.ColQuizId.MinimumWidth = 8;
             this.ColQuizId.Name = "ColQuizId";
-            this.ColQuizId.Width = 150;
+            this.ColQuizId.Width = 50;
             // 
             // ColCategoryName
             // 
             this.ColCategoryName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColCategoryName.DataPropertyName = "category_name";
             this.ColCategoryName.HeaderText = "カテゴリ";
             this.ColCategoryName.MinimumWidth = 8;
             this.ColCategoryName.Name = "ColCategoryName";
@@ -106,6 +141,7 @@ namespace QuizSample
             // ColQuiestion
             // 
             this.ColQuiestion.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ColQuiestion.DataPropertyName = "question";
             this.ColQuiestion.HeaderText = "問題";
             this.ColQuiestion.MinimumWidth = 8;
             this.ColQuiestion.Name = "ColQuiestion";
@@ -132,20 +168,14 @@ namespace QuizSample
             this.ColDelete.UseColumnTextForButtonValue = true;
             this.ColDelete.Width = 50;
             // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(13, 44);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 30);
-            this.comboBox1.TabIndex = 3;
-            // 
             // FQuizList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 22F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(678, 404);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.btnNew);
+            this.Controls.Add(this.cbxCategory);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.label1);
@@ -153,6 +183,7 @@ namespace QuizSample
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "FQuizList";
             this.Text = "クイズ一覧";
+            this.Load += new System.EventHandler(this.FQuizList_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -164,11 +195,13 @@ namespace QuizSample
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button btnClose;
+        private System.Windows.Forms.ComboBox cbxCategory;
+        private System.Windows.Forms.Button btnNew;
+        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColQuizId;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColCategoryName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColQuiestion;
         private System.Windows.Forms.DataGridViewButtonColumn ColEdit;
         private System.Windows.Forms.DataGridViewButtonColumn ColDelete;
-        private System.Windows.Forms.ComboBox comboBox1;
     }
 }

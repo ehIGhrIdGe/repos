@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExceptionLog.cs" />
     <Compile Include="FMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -87,6 +88,8 @@
     <Compile Include="FQuizList.Designer.cs">
       <DependentUpon>FQuizList.cs</DependentUpon>
     </Compile>
+    <Compile Include="ManagerDb.cs" />
+    <Compile Include="ManagerLog.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FMain.resx">
@@ -126,6 +129,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
