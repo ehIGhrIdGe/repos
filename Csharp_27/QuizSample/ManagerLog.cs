@@ -52,8 +52,10 @@ namespace QuizSample
                     Logger.Info($"削除 : {value}");
                     break;
                 case LOGTYPE.Update:
+                    Logger.Info($"更新 : {value}");
                     break;
                 case LOGTYPE.Insert:
+                    Logger.Info($"新規登録 : {value}");
                     break;
                 case LOGTYPE.Rollback:
                     Logger.Info($"ロールバック :{value}");

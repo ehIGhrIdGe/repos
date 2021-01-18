@@ -39,13 +39,13 @@ namespace QuizSample
             this.lbChoices = new System.Windows.Forms.Label();
             this.rdbttnChoice1 = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.rdbttnChoice2 = new System.Windows.Forms.RadioButton();
-            this.rdbttnChoice3 = new System.Windows.Forms.RadioButton();
-            this.rdbttnChoice4 = new System.Windows.Forms.RadioButton();
-            this.txbChoice1 = new System.Windows.Forms.TextBox();
-            this.txbChoice2 = new System.Windows.Forms.TextBox();
-            this.txbChoice3 = new System.Windows.Forms.TextBox();
             this.txbChoice4 = new System.Windows.Forms.TextBox();
+            this.txbChoice3 = new System.Windows.Forms.TextBox();
+            this.txbChoice2 = new System.Windows.Forms.TextBox();
+            this.txbChoice1 = new System.Windows.Forms.TextBox();
+            this.rdbttnChoice4 = new System.Windows.Forms.RadioButton();
+            this.rdbttnChoice3 = new System.Windows.Forms.RadioButton();
+            this.rdbttnChoice2 = new System.Windows.Forms.RadioButton();
             this.label6 = new System.Windows.Forms.Label();
             this.txbComment = new System.Windows.Forms.TextBox();
             this.btnUpdate = new System.Windows.Forms.Button();
@@ -155,27 +155,33 @@ namespace QuizSample
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
             // 
-            // rdbttnChoice2
+            // txbChoice4
             // 
-            this.rdbttnChoice2.AutoSize = true;
-            this.rdbttnChoice2.Location = new System.Drawing.Point(6, 71);
-            this.rdbttnChoice2.Name = "rdbttnChoice2";
-            this.rdbttnChoice2.Size = new System.Drawing.Size(107, 27);
-            this.rdbttnChoice2.TabIndex = 9;
-            this.rdbttnChoice2.TabStop = true;
-            this.rdbttnChoice2.Text = "選択肢２";
-            this.rdbttnChoice2.UseVisualStyleBackColor = true;
+            this.txbChoice4.Location = new System.Drawing.Point(123, 155);
+            this.txbChoice4.Name = "txbChoice4";
+            this.txbChoice4.Size = new System.Drawing.Size(375, 30);
+            this.txbChoice4.TabIndex = 15;
             // 
-            // rdbttnChoice3
+            // txbChoice3
             // 
-            this.rdbttnChoice3.AutoSize = true;
-            this.rdbttnChoice3.Location = new System.Drawing.Point(6, 114);
-            this.rdbttnChoice3.Name = "rdbttnChoice3";
-            this.rdbttnChoice3.Size = new System.Drawing.Size(107, 27);
-            this.rdbttnChoice3.TabIndex = 10;
-            this.rdbttnChoice3.TabStop = true;
-            this.rdbttnChoice3.Text = "選択肢３";
-            this.rdbttnChoice3.UseVisualStyleBackColor = true;
+            this.txbChoice3.Location = new System.Drawing.Point(123, 114);
+            this.txbChoice3.Name = "txbChoice3";
+            this.txbChoice3.Size = new System.Drawing.Size(375, 30);
+            this.txbChoice3.TabIndex = 14;
+            // 
+            // txbChoice2
+            // 
+            this.txbChoice2.Location = new System.Drawing.Point(123, 71);
+            this.txbChoice2.Name = "txbChoice2";
+            this.txbChoice2.Size = new System.Drawing.Size(375, 30);
+            this.txbChoice2.TabIndex = 13;
+            // 
+            // txbChoice1
+            // 
+            this.txbChoice1.Location = new System.Drawing.Point(123, 29);
+            this.txbChoice1.Name = "txbChoice1";
+            this.txbChoice1.Size = new System.Drawing.Size(375, 30);
+            this.txbChoice1.TabIndex = 12;
             // 
             // rdbttnChoice4
             // 
@@ -188,33 +194,27 @@ namespace QuizSample
             this.rdbttnChoice4.Text = "選択肢４";
             this.rdbttnChoice4.UseVisualStyleBackColor = true;
             // 
-            // txbChoice1
+            // rdbttnChoice3
             // 
-            this.txbChoice1.Location = new System.Drawing.Point(123, 29);
-            this.txbChoice1.Name = "txbChoice1";
-            this.txbChoice1.Size = new System.Drawing.Size(375, 30);
-            this.txbChoice1.TabIndex = 12;
+            this.rdbttnChoice3.AutoSize = true;
+            this.rdbttnChoice3.Location = new System.Drawing.Point(6, 114);
+            this.rdbttnChoice3.Name = "rdbttnChoice3";
+            this.rdbttnChoice3.Size = new System.Drawing.Size(107, 27);
+            this.rdbttnChoice3.TabIndex = 10;
+            this.rdbttnChoice3.TabStop = true;
+            this.rdbttnChoice3.Text = "選択肢３";
+            this.rdbttnChoice3.UseVisualStyleBackColor = true;
             // 
-            // txbChoice2
+            // rdbttnChoice2
             // 
-            this.txbChoice2.Location = new System.Drawing.Point(123, 71);
-            this.txbChoice2.Name = "txbChoice2";
-            this.txbChoice2.Size = new System.Drawing.Size(375, 30);
-            this.txbChoice2.TabIndex = 13;
-            // 
-            // txbChoice3
-            // 
-            this.txbChoice3.Location = new System.Drawing.Point(123, 114);
-            this.txbChoice3.Name = "txbChoice3";
-            this.txbChoice3.Size = new System.Drawing.Size(375, 30);
-            this.txbChoice3.TabIndex = 14;
-            // 
-            // txbChoice4
-            // 
-            this.txbChoice4.Location = new System.Drawing.Point(123, 155);
-            this.txbChoice4.Name = "txbChoice4";
-            this.txbChoice4.Size = new System.Drawing.Size(375, 30);
-            this.txbChoice4.TabIndex = 15;
+            this.rdbttnChoice2.AutoSize = true;
+            this.rdbttnChoice2.Location = new System.Drawing.Point(6, 71);
+            this.rdbttnChoice2.Name = "rdbttnChoice2";
+            this.rdbttnChoice2.Size = new System.Drawing.Size(107, 27);
+            this.rdbttnChoice2.TabIndex = 9;
+            this.rdbttnChoice2.TabStop = true;
+            this.rdbttnChoice2.Text = "選択肢２";
+            this.rdbttnChoice2.UseVisualStyleBackColor = true;
             // 
             // label6
             // 
@@ -243,6 +243,7 @@ namespace QuizSample
             this.btnUpdate.TabIndex = 13;
             this.btnUpdate.Text = "更新";
             this.btnUpdate.UseVisualStyleBackColor = true;
+            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
             // btnClose
             // 

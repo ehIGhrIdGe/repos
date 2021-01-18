@@ -40,13 +40,9 @@ namespace QuizSample
         /// <param name="e"></param>
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            
-
-            var log = LogManager.GetCurrentClassLogger();
-
             if (e.ColumnIndex == 3)
             {
-                new FQuizDetail(FQuizDetail.DETAILMODE.Edit, e.RowIndex).ShowDialog();
+                new FQuizDetail(this, FQuizDetail.DETAILMODE.Edit, e.RowIndex).ShowDialog();
             }
             else if (e.ColumnIndex == 4)
             {
@@ -113,7 +109,7 @@ namespace QuizSample
         /// <param name="e"></param>
         private void btnNew_Click(object sender, EventArgs e)
         {            
-            new FQuizDetail(FQuizDetail.DETAILMODE.New).ShowDialog();
+            new FQuizDetail(this ,FQuizDetail.DETAILMODE.New).ShowDialog();
         }
 
         /// <summary>
