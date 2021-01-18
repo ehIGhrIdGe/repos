@@ -32,7 +32,7 @@ namespace QuizSample
 
             Owner = owner;
             Mode = inputMode;
-            SelectedRow = selectedRow;            
+            SelectedRow = selectedRow;
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -104,25 +104,38 @@ namespace QuizSample
             }
             else
             {
-                switch (Mode)
+                if (!(rdbttnChoice1.Checked || rdbttnChoice2.Checked || rdbttnChoice3.Checked || rdbttnChoice4.Checked))
                 {
-                    case DETAILMODE.New:
-                        if (!(rdbttnChoice1.Checked || rdbttnChoice2.Checked || rdbttnChoice3.Checked ||rdbttnChoice4.Checked))
+                    MessageBox.Show("正解の選択肢にチェックを入れてください。", "更新", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    //選択されている選択肢の番号を取得
+                    var selectedCategoryNum = 1;
+                    foreach (RadioButton rdo in groupBox1.Controls)
+                    {
+                        if (rdo.Checked)
                         {
-                            MessageBox.Show("正解の選択肢にチェックを入れてください。", "更新", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            break;
                         }
-                        else
-                        {
+                        selectedCategoryNum++;
+                    }
+
+                    switch (Mode)
+                    {
+                        case DETAILMODE.New:
+                            
+
                             var nRowQuiz = dtQuiz.NewRow();
                             nRowQuiz[0] = dtQuiz.Rows.Count + 1;
                             nRowQuiz[1] = cbxCategory.SelectedIndex + 1;
                             nRowQuiz[2] = txbQuestion.Text;
-                            nRowQuiz[3] = 1;
+                            nRowQuiz[3] = selectedCategoryNum;
                             nRowQuiz[4] = string.IsNullOrWhiteSpace(txbComment.Text) ? null : txbComment.Text;
-                            nRowQuiz[5] = "SUSER_NAME()";
+                            nRowQuiz[5] = $@"{Environment.MachineName}\{Environment.UserName}";
                             nRowQuiz[6] = DateTime.Now;
                             dtQuiz.Rows.Add(nRowQuiz);
-                            
+
                             if (!ManagerDb.TryInsertData(ManagerDb.TABLETYPE.QuizTable, nRowQuiz))
                             {
                                 MessageBox.Show("クイズの新規登録ができませんでした。ログファイルを確認してください。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -148,10 +161,10 @@ namespace QuizSample
                                     nRowChoices[1] = i;
                                     nRowChoices[2] = tempTxb.Text;
 
-                                    if(i == 1)
+                                    if (i == 1)
                                     {
                                         dtChoices.Rows.Add(nRowChoices);
-                                    }                                    
+                                    }
 
                                     if (!ManagerDb.TryInsertData(ManagerDb.TABLETYPE.ChoicesTable, nRowChoices))
                                     {
@@ -164,13 +177,20 @@ namespace QuizSample
                                         this.Close();
                                     }
                                 }
-                            }                            
-                        }
-                        break;
-                    case DETAILMODE.Edit:
-
-                        break;
+                            }
+                            break;
+                        case DETAILMODE.Edit:
+                            dtQuiz.Rows[SelectedRow][1] = cbxCategory.SelectedIndex + 1;
+                            dtQuiz.Rows[SelectedRow][2] = txbQuestion.Text;
+                            dtQuiz.Rows[SelectedRow][3] = selectedCategoryNum;
+                            dtQuiz.Rows[SelectedRow][4] = string.IsNullOrWhiteSpace(txbComment.Text) ? null : txbComment.Text;
+                            dtQuiz.Rows[SelectedRow][5] = $@"{Environment.MachineName}\{Environment.UserName}";
+                            dtQuiz.Rows[SelectedRow][6] = DateTime.Now;
+                            dtChoices.Rows
+                            break;
+                    }
                 }
+
             }
         }
     }
