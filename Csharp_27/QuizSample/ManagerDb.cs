@@ -75,7 +75,7 @@ namespace QuizSample
         /// <param name="tableType">インサートしたいテーブルのタイプ</param>
         /// <param name="newRow">インサートしたい行データ</param>
         /// <param name="dataTable">結果をセットするデータテーブル</param>
-        public static bool TryUpdateData(TABLETYPE tableType, DataRow inputRow)
+        public static bool TryUpdateData(TABLETYPE tableType, DataTable inputDt)
         {
             try
             {
@@ -97,25 +97,16 @@ namespace QuizSample
                             ada.SelectCommand = cmd;
                             ada.Fill(dt);
 
-                            var nRow = dt.NewRow();
-
-                            //配列のコピーで行を追加する方法。この場合、FQuizDetail.btnUpdate_Clickの"dtQuiz.Rows.Add(nRowQuiz);"の一文はいらない。
-                            //nRow.ItemArray = inputRow.ItemArray;
-                            //dt.Rows.Add(nRow);
-
-                            //DataTable.ImportRow(DataRow)で行を追加する方法。この場合、FQuizDetail.btnUpdate_Clickの"dtQuiz.Rows.Add(nRowQuiz);"の一文が必要。（ImportRow は同一の構造を持つ DataTable に対して、既に DataTable 内で使用されている DataRow のみコピーすることができるため。）
-                            dt.ImportRow(inputRow);
 
                             //コマンドを自動設定
                             SqlCommandBuilder sqlBld = new SqlCommandBuilder();
-                            sqlBld.DataAdapter = ada;                            
-                            ada.InsertCommand = sqlBld.GetInsertCommand();
-                            var x = ada.InsertCommand.Parameters;
+                            sqlBld.DataAdapter = ada;
+                            ada.UpdateCommand = sqlBld.GetUpdateCommand();
 
-                            ManagerLog.Logging(ManagerLog.LOGTYPE.Insert, sqlBld.GetInsertCommand().CommandText);
+                            ManagerLog.Logging(ManagerLog.LOGTYPE.Update, sqlBld.GetUpdateCommand().CommandText);
 
                             //DBに反映
-                            ada.Update(dt);
+                            ada.Update(inputDt);
                             tra.Commit();
 
                             return true;
@@ -178,9 +169,8 @@ namespace QuizSample
                             ada.SelectCommand = cmd;
                             ada.Fill(dt);
 
-                            var nRow = dt.NewRow();
-
                             //配列のコピーで行を追加する方法。この場合、FQuizDetail.btnUpdate_Clickの"dtQuiz.Rows.Add(nRowQuiz);"の一文はいらない。
+                            //var nRow = dt.NewRow();
                             //nRow.ItemArray = inputRow.ItemArray;
                             //dt.Rows.Add(nRow);
 
@@ -234,9 +224,8 @@ namespace QuizSample
         /// 指定されたTABLETYPEのテーブルから、指定された行が削除されたデータテーブルをセットします。戻り値は、削除が成功したかどうか示します。
         /// </summary>
         /// <param name="tableType">取得したいテーブルのタイプ</param>
-        /// <param name="rowNumber">削除したい行</param>
-        /// <param name="dataTable">値をセットするデータテーブル</param>
-        public static bool TryDelteData(TABLETYPE tableType, int rowNumber, out DataTable dataTable)
+        /// <param name="inputQuizId">削除したいクイズの quiz_id</param>
+        public static bool TryDelteData(TABLETYPE tableType, int inputQuizId)
         {
             try
             {
@@ -256,11 +245,16 @@ namespace QuizSample
                         using (var dt = new DataTable())
                         {
                             ada.SelectCommand = cmd;
-
                             ada.Fill(dt);
-                            dt.Rows[rowNumber].Delete();
 
-                            //コマンドを自動設定
+                            //deleteの対照をセット
+                            var rowCount = dt.Select($"quiz_id = {inputQuizId}").Count();
+                            for (var i = 0; i < rowCount; i++)
+                            {
+                                dt.Select($"quiz_id = {inputQuizId}")[0].Delete();
+                            }
+
+                            //コマンドを自動設定                            
                             SqlCommandBuilder sqlBld = new SqlCommandBuilder();
                             sqlBld.DataAdapter = ada;
                             ada.DeleteCommand = sqlBld.GetDeleteCommand();
@@ -268,10 +262,9 @@ namespace QuizSample
                             ManagerLog.Logging(ManagerLog.LOGTYPE.Delete, sqlBld.GetDeleteCommand().CommandText);
 
                             //DBに反映
-                            ada.Update(dt);
-                            tra.Commit();
+                            ada.Update(dt);                        
+                            tra.Commit();                            
 
-                            dataTable = dt;
                             return true;
                         }
                     }
@@ -289,19 +282,16 @@ namespace QuizSample
             }
             catch (SqlException ex)
             {
-                dataTable = null;
                 ManagerLog.Logging(ex);
                 return false;
             }
             catch (IndexOutOfRangeException ex)
             {
-                dataTable = null;
                 ManagerLog.Logging(ex);
                 return false;
             }
             catch (InvalidOperationException ex)
             {
-                dataTable = null;
                 ManagerLog.Logging(ex);
                 return false;
             }

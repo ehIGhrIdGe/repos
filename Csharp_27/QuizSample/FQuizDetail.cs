@@ -18,21 +18,21 @@ namespace QuizSample
         }
 
         private DETAILMODE Mode { get; set; }
-        private int SelectedRow { get; set; }
+        private int SelectedQuizId { get; set; }
 
         /// <summary>
         /// クイズ詳細フォーム
         /// </summary>
         /// /// <param name="owner">親となるフォーム</param>
         /// <param name="inputMode">詳細フォームを開く際のモードを指定する。</param>
-        /// <param name="selectedRow">一覧フォームで選択された行の行番号を指定する。モードがEditのときのみ必要になる。</param>        
-        public FQuizDetail(FQuizList owner, DETAILMODE inputMode, int selectedRow = 0)
+        /// <param name="selectedQuizId">一覧フォームで選択したクイズの quiz_id。モードがEditのときのみ必要になる。</param>        
+        public FQuizDetail(FQuizList owner, DETAILMODE inputMode, int selectedQuizId = 0)
         {
             InitializeComponent();
 
             Owner = owner;
             Mode = inputMode;
-            SelectedRow = selectedRow;
+            SelectedQuizId = selectedQuizId;
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -42,10 +42,9 @@ namespace QuizSample
 
         private void FQuizDetail_Load(object sender, EventArgs e)
         {
-            //categoryテーブル、quizテーブルのデータを取得し、データテーブルにセットする。
-            if (!ManagerDb.TryGetData(ManagerDb.TABLETYPE.CategoryTable, out var dtCategory))
+            if (!ManagerDb.TryGetData(ManagerDb.TABLETYPE.ChoicesTable, out var dtChoices) || !ManagerDb.TryGetData(ManagerDb.TABLETYPE.QuizTable, out var dtQuiz) || !ManagerDb.TryGetData(ManagerDb.TABLETYPE.CategoryTable, out var dtCategory))
             {
-                MessageBox.Show("カテゴリが読み込めませんでした。ログファイルを確認してください。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("データが読み込めませんでした。ログファイルを確認してください。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             else
             {
@@ -56,35 +55,29 @@ namespace QuizSample
                 }
 
                 cbxCategory.SelectedIndex = 0;
-            }
 
-            if (!ManagerDb.TryGetData(ManagerDb.TABLETYPE.QuizCategoryChoicesTable, out var dtQuizList))
-            {
-                MessageBox.Show("データが読み込めませんでした。ログファイルを確認してください。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            else
-            {
+                //新規か編集化で表示を変更
                 switch (Mode)
                 {
                     case DETAILMODE.New:
-                        //クエリで選択肢まで含めた結果を取得しているため、その総数を選択肢の数で割ることで現在の問題数を求めている
-                        lbQuizIdNum.Text = $"{dtQuizList.Rows.Count / 4 + 1}";
+                        //新規で登録する番号は常に最新
+                        lbQuizIdNum.Text = $"{(int)dtQuiz.Rows[dtQuiz.Rows.Count -1][0] + 1}";
                         break;
                     case DETAILMODE.Edit:
                         //EnumerableRowCollection<DataRow> dataRows = dtQuizList.AsEnumerable();
 
                         //クリックした問題の詳細を表示
-                        cbxCategory.SelectedIndex = (int)dtQuizList.Select($"quiz_id = {SelectedRow + 1} AND choices_id = 1")[0]["category_id"] - 1;
-                        lbQuizIdNum.Text = $"{dtQuizList.Select($"quiz_id = {SelectedRow + 1} AND choices_id = 1")[0]["quiz_id"]}";
-                        txbQuestion.Text = $"{dtQuizList.Select($"quiz_id = {SelectedRow + 1} AND choices_id = 1")[0]["question"]}";
-                        txbChoice1.Text = $"{dtQuizList.Select($"quiz_id = {SelectedRow + 1} AND choices_id = 1")[0]["disp_value"]}";
-                        txbChoice2.Text = $"{dtQuizList.Select($"quiz_id = {SelectedRow + 1} AND choices_id = 2")[0]["disp_value"]}";
-                        txbChoice3.Text = $"{dtQuizList.Select($"quiz_id = {SelectedRow + 1} AND choices_id = 3")[0]["disp_value"]}";
-                        txbChoice4.Text = $"{dtQuizList.Select($"quiz_id = {SelectedRow + 1} AND choices_id = 4")[0]["disp_value"]}";
-                        txbComment.Text = $"{dtQuizList.Select($"quiz_id = {SelectedRow + 1} AND choices_id = 1")[0]["comment"]}";
+                        cbxCategory.SelectedIndex = (int)dtQuiz.Select($"quiz_id = {SelectedQuizId}")[0]["category_id"] - 1;
+                        lbQuizIdNum.Text = $"{SelectedQuizId}";
+                        txbQuestion.Text = $"{dtQuiz.Select($"quiz_id = {SelectedQuizId}")[0]["question"]}";
+                        txbChoice1.Text = $"{dtChoices.Select($"quiz_id = {SelectedQuizId}")[0]["disp_value"]}";
+                        txbChoice2.Text = $"{dtChoices.Select($"quiz_id = {SelectedQuizId}")[1]["disp_value"]}";
+                        txbChoice3.Text = $"{dtChoices.Select($"quiz_id = {SelectedQuizId}")[2]["disp_value"]}";
+                        txbChoice4.Text = $"{dtChoices.Select($"quiz_id = {SelectedQuizId}")[3]["disp_value"]}";
+                        txbComment.Text = $"{dtQuiz.Select($"quiz_id = {SelectedQuizId}")[0]["comment"]}";
 
                         //正解の選択肢にチェックを入れる
-                        var answer = dtQuizList.Select($"quiz_id = {SelectedRow + 1} AND choices_id = 1")[0]["answer"];
+                        var answer = dtQuiz.Select($"quiz_id = {SelectedQuizId}")[0]["answer"];
                         var rdbttnChoice = (RadioButton)groupBox1.Controls[$"rdbttnChoice{answer}"];
                         rdbttnChoice.Checked = true;
                         break;
@@ -111,23 +104,22 @@ namespace QuizSample
                 else
                 {
                     //選択されている選択肢の番号を取得
-                    var selectedCategoryNum = 1;
-                    foreach (RadioButton rdo in groupBox1.Controls)
+                    var selectedCategoryNum =0;
+                    foreach (RadioButton rdo in groupBox1.Controls.OfType<RadioButton>())
                     {
                         if (rdo.Checked)
                         {
+                            var tempStr = rdo.Name.Substring(rdo.Name.Length - 1, 1);
+                            selectedCategoryNum = int.Parse(tempStr);
                             break;
                         }
-                        selectedCategoryNum++;
                     }
 
                     switch (Mode)
                     {
                         case DETAILMODE.New:
-                            
-
                             var nRowQuiz = dtQuiz.NewRow();
-                            nRowQuiz[0] = dtQuiz.Rows.Count + 1;
+                            nRowQuiz[0] = (int)dtQuiz.Rows[dtQuiz.Rows.Count - 1][0] + 1;
                             nRowQuiz[1] = cbxCategory.SelectedIndex + 1;
                             nRowQuiz[2] = txbQuestion.Text;
                             nRowQuiz[3] = selectedCategoryNum;
@@ -168,6 +160,7 @@ namespace QuizSample
 
                                     if (!ManagerDb.TryInsertData(ManagerDb.TABLETYPE.ChoicesTable, nRowChoices))
                                     {
+                                        ManagerDb.TryDelteData(ManagerDb.TABLETYPE.QuizTable, dtQuiz.Rows.Count);
                                         MessageBox.Show($"選択肢{i}番の新規登録ができませんでした。ログファイルを確認してください。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                                         break;
                                     }
@@ -180,13 +173,42 @@ namespace QuizSample
                             }
                             break;
                         case DETAILMODE.Edit:
-                            dtQuiz.Rows[SelectedRow][1] = cbxCategory.SelectedIndex + 1;
-                            dtQuiz.Rows[SelectedRow][2] = txbQuestion.Text;
-                            dtQuiz.Rows[SelectedRow][3] = selectedCategoryNum;
-                            dtQuiz.Rows[SelectedRow][4] = string.IsNullOrWhiteSpace(txbComment.Text) ? null : txbComment.Text;
-                            dtQuiz.Rows[SelectedRow][5] = $@"{Environment.MachineName}\{Environment.UserName}";
-                            dtQuiz.Rows[SelectedRow][6] = DateTime.Now;
-                            dtChoices.Rows
+                            dtQuiz.Select($"quiz_id = {SelectedQuizId}")[0][1] = cbxCategory.SelectedIndex + 1;
+                            dtQuiz.Select($"quiz_id = {SelectedQuizId}")[0][2] = txbQuestion.Text;
+                            dtQuiz.Select($"quiz_id = {SelectedQuizId}")[0][3] = selectedCategoryNum;
+                            dtQuiz.Select($"quiz_id = {SelectedQuizId}")[0][4] = string.IsNullOrWhiteSpace(txbComment.Text) ? null : txbComment.Text;
+                            dtQuiz.Select($"quiz_id = {SelectedQuizId}")[0][5] = $@"{Environment.MachineName}\{Environment.UserName}";
+                            dtQuiz.Select($"quiz_id = {SelectedQuizId}")[0][6] = DateTime.Now;
+                            dtChoices.Select($"quiz_id = {SelectedQuizId} AND choices_id = 1")[0][2] = txbChoice1.Text;
+                            dtChoices.Select($"quiz_id = {SelectedQuizId} AND choices_id = 2")[0][2] = txbChoice2.Text;
+                            dtChoices.Select($"quiz_id = {SelectedQuizId} AND choices_id = 3")[0][2] = txbChoice3.Text;
+                            dtChoices.Select($"quiz_id = {SelectedQuizId} AND choices_id = 4")[0][2] = txbChoice4.Text;
+
+                            if (!ManagerDb.TryUpdateData(ManagerDb.TABLETYPE.QuizTable, dtQuiz))
+                            {
+                                MessageBox.Show("quizテーブルの更新ができませんでした。ログファイルを確認してください。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                break;
+                            }
+                            else if(!ManagerDb.TryUpdateData(ManagerDb.TABLETYPE.ChoicesTable, dtChoices))
+                            {
+                                MessageBox.Show("choicesテーブルの更新ができませんでした。ログファイルを確認してください。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                break;
+                            }
+                            else
+                            {
+                                if (!ManagerDb.TryGetData(ManagerDb.TABLETYPE.QuizCategoryTable, out var tempTable))
+                                {
+                                    MessageBox.Show("データが取得できませんでした。ログファイルを確認してください。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    break;
+                                }
+                                else
+                                {
+                                    var oDataGrid = (DataGridView)Owner.Controls["dataGridView1"];
+                                    oDataGrid.DataSource = tempTable;
+                                    MessageBox.Show("更新が完了しました。", "更新", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    this.Close();
+                                }
+                            }
                             break;
                     }
                 }

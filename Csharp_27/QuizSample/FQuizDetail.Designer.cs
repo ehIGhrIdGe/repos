@@ -92,6 +92,7 @@ namespace QuizSample
             // 
             // cbxCategory
             // 
+            this.cbxCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxCategory.FormattingEnabled = true;
             this.cbxCategory.Location = new System.Drawing.Point(163, 142);
             this.cbxCategory.Name = "cbxCategory";

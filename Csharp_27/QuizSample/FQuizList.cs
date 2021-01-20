@@ -26,6 +26,7 @@ namespace QuizSample
             }
             else
             {
+                dataGridView1.ReadOnly = true;
                 //自動列生成の禁止
                 dataGridView1.AutoGenerateColumns = false;
                 //DataGridView に表示するデータテーブルの定義
@@ -40,22 +41,32 @@ namespace QuizSample
         /// <param name="e"></param>
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            var quizId = (int)dataGridView1.Rows[e.RowIndex].Cells[0].Value;
+
             if (e.ColumnIndex == 3)
             {
-                new FQuizDetail(this, FQuizDetail.DETAILMODE.Edit, e.RowIndex).ShowDialog();
+                new FQuizDetail(this, FQuizDetail.DETAILMODE.Edit, quizId).ShowDialog();
             }
             else if (e.ColumnIndex == 4)
             {
-                if (!ManagerDb.TryDelteData(ManagerDb.TABLETYPE.QuizTable, e.RowIndex, out var dataTable))
+                if(!ManagerDb.TryDelteData(ManagerDb.TABLETYPE.ChoicesTable, quizId)|| !ManagerDb.TryDelteData(ManagerDb.TABLETYPE.QuizTable, quizId))
                 {
                     MessageBox.Show("データを削除できませんでした。ログファイルを確認してください。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 else
                 {
-                    dataGridView1.DataSource = dataTable;
-                    dataGridView1.CurrentCell = dataGridView1[0, e.RowIndex - 1];
-                    MessageBox.Show("データを削除しました。", "削除", MessageBoxButtons.OK, MessageBoxIcon.Information);                    
+                    if (!ManagerDb.TryGetData(ManagerDb.TABLETYPE.QuizCategoryTable, out var dataTable))
+                    {
+                        MessageBox.Show("データを更新できませんでした。ログファイルを確認してください。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    else
+                    {
+                        dataGridView1.DataSource = dataTable;
+                        dataGridView1.CurrentCell = dataGridView1[0, e.RowIndex - 1];
+                        MessageBox.Show("データを削除しました。", "削除", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                 }
+                
             }
         }
       
