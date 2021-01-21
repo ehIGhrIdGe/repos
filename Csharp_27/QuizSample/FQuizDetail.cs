@@ -149,7 +149,7 @@ namespace QuizSample
                                 for (var i = 1; i <= 4; i++)
                                 {
                                     var tempTxb = (TextBox)groupBox1.Controls[$"txbChoice{i}"];
-                                    nRowChoices[0] = dtQuiz.Rows.Count;
+                                    nRowChoices[0] = (int)dtQuiz.Rows[dtQuiz.Rows.Count - 1][0];
                                     nRowChoices[1] = i;
                                     nRowChoices[2] = tempTxb.Text;
 
@@ -160,7 +160,7 @@ namespace QuizSample
 
                                     if (!ManagerDb.TryInsertData(ManagerDb.TABLETYPE.ChoicesTable, nRowChoices))
                                     {
-                                        ManagerDb.TryDelteData(ManagerDb.TABLETYPE.QuizTable, dtQuiz.Rows.Count);
+                                        ManagerDb.TryDelteData(ManagerDb.TABLETYPE.QuizTable, (int)dtQuiz.Rows[dtQuiz.Rows.Count - 1][0]);
                                         MessageBox.Show($"選択肢{i}番の新規登録ができませんでした。ログファイルを確認してください。", "エラー", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                                         break;
                                     }
