@@ -1,0 +1,39 @@
+﻿@model Person
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<hr />
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            <label asp-for="Name"></label>
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            <label asp-for="Age"></label>
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Age)
+        </dd>
+        <dt>
+            <label asp-for="BirthDay"></label>
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BirthDay)
+        </dd>
+        <dt>
+            <label asp-for="IsMarried"></label>
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IsMarried)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Indexアクションへのリンク</a>
+</div>

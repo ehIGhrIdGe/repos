@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Person>
+@{
+    ViewData["Title"] = "List";
+}
+
+<h1>List</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>BirthDay</th>
+            <th>IsMarried</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var person in Model)
+        {
+        <tr>
+            <td>@person.Name</td>
+            <td>@person.Age</td>
+            <td>@person.BirthDay</td>
+            <td>@person.IsMarried</td>
+        </tr>
+        }
+    </tbody>
+</table>
