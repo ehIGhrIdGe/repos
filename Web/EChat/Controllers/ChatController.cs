@@ -3,15 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EChat.Models;
 
-namespace ChatApp.Controllers
+namespace EChat.Controllers
 {
     public class ChatController : Controller
     {
         public IActionResult Index()
         {
-            ViewBag.Message = "Start";
-            return View();
+            var messages = ManagerDb.GetMessages();
+            
+            return View(messages);
         }
     }
 }

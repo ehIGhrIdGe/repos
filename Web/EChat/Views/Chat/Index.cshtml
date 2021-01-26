@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Messages>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>ChatApp</title>
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
+</head>
+<body>
+    <h1>Index</h1>
+    <h2>@ViewBag.Message</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>PostDt</th>
+                <th>Message</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var messages in Model)
+            {
+                <tr>
+                    <td>@messages.Id</td>
+                    <td>@messages.PostAt</td>
+                    <td>@messages.Message</td>
+                    <td>@messages.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>
