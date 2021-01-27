@@ -1,0 +1,57 @@
+﻿@model PersonViewModel
+@{
+    ViewData["Title"] = "CreateAndList";
+}
+
+<h1>CreateAndList</h1>
+<h1>Create</h1>
+<hr />
+<div>
+    <form asp-action="CreateAndList">
+        <div>
+            <label asp-for="Person.Name"></label>
+            <input name="Name" asp-for="Person.Name" />
+        </div>
+        <div>
+            <label asp-for="Person.Age"></label>
+            <input name="Age" asp-for="Person.Age" />
+        </div>
+        <div>
+            <label asp-for="Person.BirthDay"></label>
+            <input name="BirthDay" asp-for="Person.BirthDay" type="date" />
+        </div>
+        <div>
+            <label asp-for="Person.IsMarried"></label>
+            <input name="IsMarried" asp-for="Person.IsMarried" />
+        </div>
+        <div>
+            <input type="submit" value="CreateAndList" />
+        </div>
+    </form>
+</div>
+<hr />
+<h1>List</h1>
+<table>
+    @if (Model.Persons != null)
+    {
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>BirthDay</th>
+                <th>IsMarried</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var person in Model.Persons)
+            {
+                <tr>
+                    <td>@person.Name</td>
+                    <td>@person.Age</td>
+                    <td>@person.BirthDay</td>
+                    <td>@person.IsMarried</td>
+                </tr>
+            }
+        </tbody>
+    }
+</table>

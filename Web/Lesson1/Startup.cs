@@ -46,7 +46,7 @@ namespace Lesson1
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Hello}/{action=Details}/{id?}");
+                    pattern: "{controller=Hello}/{action=CreateAndList}/{id?}");
             });
         }
     }
