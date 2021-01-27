@@ -10,28 +10,17 @@
     <link rel="stylesheet" type="text/css" href="~/css/site.css" />
 </head>
 <body>
-    <h1>Index</h1>
-    <h2>@ViewBag.Message</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>PostDt</th>
-                <th>Message</th>
-                <th>Name</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div>
+        <ul>
             @foreach (var messages in Model)
             {
-                <tr>
-                    <td>@messages.Id</td>
-                    <td>@messages.PostAt</td>
-                    <td>@messages.Message</td>
-                    <td>@messages.Name</td>
-                </tr>
+                <li class="label-box-contents-hidden">
+                    <p class="message">>@messages.PostAt @messages.Name </p>
+                    <p class="message">@messages.Message</p>
+                </li>
+                <br />
             }
-        </tbody>
-    </table>
+        </ul>
+    </div>    
 </body>
 </html>

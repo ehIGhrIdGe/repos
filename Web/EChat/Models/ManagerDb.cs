@@ -17,6 +17,11 @@ namespace EChat.Models
             ChatLogs,Users
         }
 
+        private enum QUERYTYPE
+        {
+            ChatLogs, Users, ChatLogsUsers
+        }
+
         private static string ExcuteQuery { get; set; }
 
         private static SqlConnection SqlConnection { get; set; }
@@ -33,7 +38,7 @@ namespace EChat.Models
 
         public static List<Messages> GetMessages()
         {
-            LoadQuery();
+            LoadQuery(QUERYTYPE.ChatLogs);
             GetData();
 
             List<Messages> messagesList = new List<Messages>();
@@ -91,19 +96,14 @@ namespace EChat.Models
             }
         } 
 
-        private static void BeginTr()
-        {
-            SqlTransaction = SqlConnection.BeginTransaction();
-        }
-
         /// <summary>
         /// ManagerDb.ExcuteQueryに実行したいクエリをセットする
         /// </summary>
-        private static void LoadQuery()
+        private static void LoadQuery(QUERYTYPE queryType)
         {
             try
             {
-                using (var reader = new StreamReader(Configuration.GetSection("ExcuteQueryPath").GetValue<string>("ChatLogs")))
+                using (var reader = new StreamReader(Configuration.GetSection("ExcuteQueryPath").GetValue<string>(queryType.ToString())))
                 {
                     ExcuteQuery = reader.ReadToEnd();
                 }

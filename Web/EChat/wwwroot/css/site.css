@@ -1,8 +1,52 @@
-﻿body {
+﻿html{
+    background-color:#000000
+}
+
+body {
+    font: normal normal 400 18px normal 'Meiryo UI';
+    margin: 0em 3em;
+    padding: 1%;
+    border: 2px solid #ace3e3;
+    text-align: center;
 }
 
 h1{
     color: aquamarine;
     font-family: 'Meiryo UI';
     font-size: 24px;
+}
+
+.label-box-contents {
+    padding: 0em 1em;
+    margin: 1em 0em;
+    border: 2px dashed #ace3e3;
+    width: 30%;
+}
+
+.label-box-contents-hidden {
+    display: inline-block;
+    padding: 0em 1em;
+    margin: 1em 0em;
+    border: 2px solid #ace3e3;
+    max-width: 400px;
+    min-width: 250px;
+}
+
+li{
+    list-style: none;
+}
+
+.message {
+    color: #ace3e3;
+    margin: 0em;
+    padding: 0em;
+}
+
+.postdate{
+    font-size:x-small;
+    color: #ace3e3;
+}
+
+.white-space-norap {
+    white-space: nowrap;
 }
