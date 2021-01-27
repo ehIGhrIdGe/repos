@@ -22,6 +22,8 @@ namespace EChat.Models
             ChatLogs, Users, ChatLogsUsers
         }
 
+        public static IConfiguration Configuration { get; set; }
+
         private static string ExcuteQuery { get; set; }
 
         private static SqlConnection SqlConnection { get; set; }
@@ -32,30 +34,43 @@ namespace EChat.Models
 
         private static DataTable DataTable { get; set; }
 
-        private static SqlTransaction SqlTransaction { get; set; }
+        private static SqlTransaction SqlTransaction { get; set; }              
 
-        public static IConfiguration Configuration { get; set; }        
+        public static bool InsertMessage(string msg)
+        {
+            LoadQuery(QUERYTYPE.ChatLogs);
 
-        public static List<Messages> GetMessages()
+            var tempDt = DataTable.Clone();
+            var nr = tempDt.NewRow();
+            nr[1] = DateTime.Now;
+            nr[2] = msg;
+            nr[3] = Environment.UserName;
+            tempDt.Rows.Add(nr);
+
+            return TryInsertData(nr);
+        }
+
+        /// <summary>
+        /// メッセージを読み込む
+        /// </summary>
+        /// <returns></returns>
+        public static List<Message> GetMessages()
         {
             LoadQuery(QUERYTYPE.ChatLogs);
             GetData();
 
-            List<Messages> messagesList = new List<Messages>();
+            List<Message> messagesList = new List<Message>();
 
             foreach(DataRow message in DataTable.Rows)
             {
-                var temp = new Messages((int)message[0], (DateTime)message[1], message[2].ToString(), message[3].ToString());
+                var temp = new Message((int)message[0], (DateTime)message[1], message[2].ToString(), message[3].ToString());
                 messagesList.Add(temp);
             }
 
             return messagesList;
         }
 
-        /// <summary>
-        /// ManagerDb.DataTableにデータをセットする
-        /// </summary>
-        private static void GetData()
+        private static bool TryInsertData(DataRow inputRow)
         {
             try
             {
@@ -76,6 +91,62 @@ namespace EChat.Models
                         {
                             SqlDataAdapter.SelectCommand = SqlCommand;
                             SqlDataAdapter.Fill(DataTable);
+
+                            DataTable.ImportRow(inputRow);
+
+                            SqlCommandBuilder sqlBld = new SqlCommandBuilder();
+                            sqlBld.DataAdapter = SqlDataAdapter;
+                            SqlDataAdapter.InsertCommand = sqlBld.GetInsertCommand();
+
+                            SqlDataAdapter.Update(DataTable);
+                            SqlTransaction.Commit();
+                            return true;
+                        }
+                    }
+                    catch (SqlException)
+                    {
+                        SqlTransaction.Rollback();
+                        throw;
+                    }
+                    finally
+                    {
+                        SqlConnection.Close();
+                    }
+                }
+            }
+            catch (SqlException)
+            {
+                return false;
+                throw;                
+            }
+        }
+
+        private static void UpdateData()
+        {
+            try
+            {
+                using (SqlConnection = new SqlConnection(Configuration.GetConnectionString("DefaultConnection")))
+                using (SqlCommand = new SqlCommand())
+                using (SqlDataAdapter = new SqlDataAdapter())
+                {
+                    SqlConnection.Open();
+                    SqlCommand.Connection = SqlConnection;
+                    SqlCommand.CommandText = ExcuteQuery;
+
+                    SqlTransaction = SqlConnection.BeginTransaction();
+                    SqlCommand.Transaction = SqlTransaction;
+
+                    try
+                    {
+                        using (DataTable = new DataTable())
+                        {
+                            SqlDataAdapter.SelectCommand = SqlCommand;
+                            SqlDataAdapter.Fill(DataTable);
+
+                            SqlCommandBuilder sqlBld = new SqlCommandBuilder();
+                            sqlBld.DataAdapter = SqlDataAdapter;
+                            SqlDataAdapter.UpdateCommand = sqlBld.GetUpdateCommand();
+
                             SqlTransaction.Commit();
                         }
                     }
@@ -94,10 +165,50 @@ namespace EChat.Models
             {
                 throw;
             }
+        }
+
+        /// <summary>
+        /// ManagerDb.DataTableにデータをセットする
+        /// </summary>
+        /// <param name="excuteQuery">実行したいクエリ</param>
+        private static void GetData()
+        {
+            try
+            {
+                using (SqlConnection = new SqlConnection(Configuration.GetConnectionString("DefaultConnection")))
+                using (SqlCommand = new SqlCommand())
+                using (SqlDataAdapter = new SqlDataAdapter())
+                {
+                    SqlConnection.Open();
+                    SqlCommand.Connection = SqlConnection;
+                    SqlCommand.CommandText = ExcuteQuery;
+
+                    try
+                    {
+                        using (DataTable = new DataTable())
+                        {
+                            SqlDataAdapter.SelectCommand = SqlCommand;
+                            SqlDataAdapter.Fill(DataTable);
+                        }
+                    }
+                    catch (SqlException)
+                    {
+                        throw;
+                    }
+                    finally
+                    {
+                        SqlConnection.Close();
+                    }
+                }
+            }
+            catch (SqlException)
+            {
+                throw;
+            }
         } 
 
         /// <summary>
-        /// ManagerDb.ExcuteQueryに実行したいクエリをセットする
+        /// QUERYTYPE で指定された実行したいクエリを読み込む
         /// </summary>
         private static void LoadQuery(QUERYTYPE queryType)
         {

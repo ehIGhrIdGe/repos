@@ -7,22 +7,27 @@ using System.Threading.Tasks;
 
 namespace EChat.Models
 {
-    public class Messages
+    public class Message
     {
         public int Id { get; set; }
 
         public DateTime PostAt { get; set; }
 
-        public string Message { get; set; }
+        public string Msg { get; set; }
 
         public string Name { get; set; }
 
-        public Messages(int id, DateTime postAt, string message, string name)
+        public Message(int id, DateTime postAt, string msg, string name)
         {
             Id = id;
             PostAt = postAt;
-            Message = message;
+            Msg = msg;
             Name = name;
+        }
+
+        public Message(string msg)
+        {
+            Msg = msg;
         }
     }
 }

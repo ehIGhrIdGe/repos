@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Messages>
+﻿@model IEnumerable<Message>
 @{
     ViewData["Title"] = "Index";
 }
@@ -16,11 +16,18 @@
             {
                 <li class="label-box-contents-hidden">
                     <p class="message">>@messages.PostAt @messages.Name </p>
-                    <p class="message">@messages.Message</p>
+                    <p class="message">@messages.Msg</p>
                 </li>
                 <br />
             }
         </ul>
-    </div>    
+    </div>
+    <hr />
+    <form asp-action="Index">
+        <div>
+            <input name="Msg" type="text" />
+        </div>
+        <input type="submit" value="更新" />
+    </form>
 </body>
 </html>

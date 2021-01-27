@@ -9,11 +9,25 @@ namespace EChat.Controllers
 {
     public class ChatController : Controller
     {
+        [HttpGet]
         public IActionResult Index()
         {
-            var messages = ManagerDb.GetMessages();
-            
-            return View(messages);
+            return View(ManagerDb.GetMessages());
+        }
+
+        [HttpPost]
+        public IActionResult Index(string msg)
+        {
+            if (!ManagerDb.InsertMessage(msg))
+            {
+
+            }
+            else
+            {
+                RedirectToAction(nameof(Index));
+            }
+
+            return View(ManagerDb.GetMessages());
         }
     }
 }
