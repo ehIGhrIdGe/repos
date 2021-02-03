@@ -1,0 +1,15 @@
+﻿@model UserInfo
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>@ViewBag.Message</h1>
+<form asp-action="Index">
+    <div>
+        <input name="UserId" type="text" />
+    </div>
+    <div>
+        <input name="Password" type="password" />
+    </div>
+    <input type="submit" value="ログイン" />
+</form>

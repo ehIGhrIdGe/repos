@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EChat.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace EChat
 {
@@ -28,6 +29,25 @@ namespace EChat
             services.AddMvc(options => options.EnableEndpointRouting = false);
 
             ManagerDb.Configuration = Configuration;
+
+            //AddAuthenticationメソッドには、使用する認証方式を文字列として渡す。
+            //「CookieAuthenticationDefaults.AuthenticationScheme」は Cookie認証を示す文字列（定数）
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    //認証されていないユーザーがリソースにアクセスしようとしたときにリダイレクトする相対パス
+                    options.LoginPath = new PathString("/Login/Index");
+
+                    //アクセスが禁止されているリソースにアクセスしようとしたときにリダイレクトする相対パス
+                    //options.AccessDeniedPath= new PathString(“/コントローラー/アクション名);
+                    
+                    //認証Cookieの有効期限を設定する。
+                    //options.ExpireTimeSpan= TimeSpan.FromMinutes(60);
+                    
+                    //Cookieの有効期限が半分より過ぎたときにユーザーがログインをしていると、
+                    //自動で有効期限を更新する
+                    //options.SlidingExpiration= true;        
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,14 +68,16 @@ namespace EChat
             //    });
             //});
 
+            app.UseAuthentication();
             app.UseStaticFiles();
 
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Chat}/{action=Index}/{id?}");
-            });
+                    //template: "{controller=Chat}/{action=Index}/{id?}");
+                    template: "{controller=Login}/{action=Index}/{id?}");
+        });
         }
     }
 }

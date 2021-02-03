@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EChat.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EChat.Models;
+using System.Security.Claims;
 
 namespace EChat.Controllers
 {
+    [Authorize]
     public class ChatController : Controller
     {
         [HttpGet]
@@ -18,7 +21,7 @@ namespace EChat.Controllers
         [HttpPost]
         public IActionResult Index(string msg)
         {
-            if (!ManagerDb.InsertMessage(msg))
+            if (!ManagerDb.InsertMessage(msg, User.Identity.Name))
             {
 
             }
