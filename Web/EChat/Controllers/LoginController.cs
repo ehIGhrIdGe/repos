@@ -53,8 +53,8 @@ namespace EChat.Controllers
             {
                 return false;
             }
-                
-            if(!ManageHash.CompareHash(ManageHash.GetHash(inputPass), userInfoList[0].Password))
+
+            if(!ManageHash.CompareHash(ManageHash.GetHash(inputPass + userInfoList[0].PasswordSalt), userInfoList[0].Password))
             {
                 return false;
             }
