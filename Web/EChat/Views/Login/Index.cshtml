@@ -1,22 +1,27 @@
-﻿@model User
+﻿@model LoginViewModel
 @{
     ViewData["Title"] = "Index";
 }
 
 
-@if (!string.IsNullOrEmpty((string)TempData["outMsg"]))
+@if (!string.IsNullOrEmpty(ViewBag.Message))
 {
-    <h1>@ViewBag.Message</h1>
-    <h1>もう一度入力してください。</h1>
+    <h5>@ViewBag.Message</h5>
+    <h5>もう一度入力してください。</h5>
     <hr />
 }
 
 <form asp-action="Index">
+    <div asp-validation-summary="ModelOnly"></div>
     <div>
+        <label asp-for="UserId"></label>
         <input name="UserId" type="text" />
+        <span asp-validation-for="UserId"></span>
     </div>
     <div>
+        <label asp-for="Password"></label>
         <input name="Password" type="password" />
+        <span asp-validation-for="Password"></span>
     </div>
     <input type="submit" value="ログイン" />
 </form>

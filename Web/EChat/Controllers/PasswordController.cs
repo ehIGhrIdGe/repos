@@ -17,22 +17,27 @@ namespace EChat.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(string newPassword, string confirmPassword)
+        public IActionResult Index(PasswordViewModel model)
         {
-            if (string.IsNullOrEmpty(newPassword))
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            if (string.IsNullOrEmpty(model.NewPassword))
             {
                 TempData["outMsg"] = "新しいパスワードが入力されていません。";
-                return RedirectToAction("Index");
+                return View();
             }
-            else if (string.IsNullOrEmpty(confirmPassword))
+            else if (string.IsNullOrEmpty(model.ConfirmPassword))
             {
                 TempData["outMsg"] = "確認用パスワードが入力されていません。";
-                return RedirectToAction("Index");
+                return View();
             }
-            else if(newPassword.CompareTo(confirmPassword) != 0)
+            else if(model.NewPassword.CompareTo(model.ConfirmPassword) != 0)
             {
                 TempData["outMsg"] = "新しいパスワードと確認用パスワードがが一致しません。";
-                return RedirectToAction("Index");
+                return View();
             }
 
             var userInfoList = ManagerDb.GetUserInfo((string)TempData["userId"]);
@@ -40,13 +45,13 @@ namespace EChat.Controllers
                                 userInfoList[0].UserName,
                                 1,
                                 userInfoList[0].PasswordSalt,
-                                ManageHash.GetHash(newPassword + userInfoList[0].PasswordSalt),
+                                ManageHash.GetHash(model.NewPassword + userInfoList[0].PasswordSalt),
                                 userInfoList[0].IsAdministrator);
 
             if (!ManagerDb.UpdateUserInfo(user))
             {
                 TempData["outMsg"] = "パスワードの更新に失敗しました。";
-                return RedirectToAction("Index");
+                return View();
             }
 
             TempData["outMsg"] = "パスワードが更新されました。";

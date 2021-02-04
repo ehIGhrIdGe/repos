@@ -1,22 +1,25 @@
-﻿@model UserInfo
+﻿@model PasswordViewModel
 @{
     ViewData["Title"] = "Index";
 }
 
-<h6>パスワードを更新してください</h6>
+<h5>パスワードを更新してください</h5>
 @if (!string.IsNullOrEmpty((string)TempData["outMsg"]))
 {
-    <hr />
-    <h6>@ViewBag.Message</h6>
-    <h6>もう一度入力してください。</h6>
+    <h5>@ViewBag.Message</h5>
+    <h5>もう一度入力してください。</h5>
     <hr />
 }
 <form asp-action="Index">
     <div>
+        <label asp-for="NewPassword"></label>
         <input name="NewPassword" type="password" />
+        <span asp-validation-for="NewPassword"></span>
     </div>
     <div>
+        <label asp-for="ConfirmPassword"></label>
         <input name="ConfirmPassword" type="password" />
+        <span asp-validation-for="ConfirmPassword"></span>
     </div>
     <input type="submit" value="更新" />
 </form>

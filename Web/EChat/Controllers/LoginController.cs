@@ -21,16 +21,21 @@ namespace EChat.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(string userId, string password)
+        public async Task<IActionResult> Index(LoginViewModel model)
         {
-            if (TryLogin(userId, password, out string outMsg, out var identity))
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            if (TryLogin(model.UserId, model.Password, out string outMsg, out var identity))
             {
                 //sign in
                 await HttpContext.SignInAsync(new ClaimsPrincipal(identity));
             }
             else if (outMsg == "ChangePassword")
             {
-                TempData["userId"] = userId;
+                TempData["userId"] = model.UserId;
                 return RedirectToAction("Index", "Password");
             }
 

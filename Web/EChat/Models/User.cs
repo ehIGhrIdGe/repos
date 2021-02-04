@@ -9,7 +9,8 @@ namespace EChat.Models
 {
     public class User
     {
-        [DisplayName("User Id")]
+        [DisplayName("ユーザーID")]
+        [Required(AllowEmptyStrings = false ,ErrorMessage ="※必須入力です。")]
         public string UserId { get; private set; }
 
         [DisplayName("User Name")]
@@ -21,7 +22,8 @@ namespace EChat.Models
         [DisplayName("Password Salt")]
         public string PasswordSalt { get; private set; }
 
-        [DisplayName("Password")]
+        [DisplayName("パスワード")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "※必須入力です。")]
         public string Password { get; private set; }
 
         [DisplayName("Is Administrator")]
