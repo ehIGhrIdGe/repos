@@ -88,10 +88,25 @@ namespace EChat.Controllers
             else
             {
                 //Create Claims
-                var claims = new[]
+                var claims = new Claim[0];
+
+                if (!userInfoList[0].IsAdministrator)
                 {
-                    new Claim(ClaimTypes.Name, userInfoList[0].UserId)
-                };
+                    claims = new[]
+                    {
+                        new Claim(ClaimTypes.Name, userInfoList[0].UserId),
+                        new Claim(ClaimTypes.Role, "People")
+                    };
+                }
+                else
+                {
+                    claims = new[]
+                    {
+                        new Claim(ClaimTypes.Name, userInfoList[0].UserId),
+                        new Claim(ClaimTypes.Role, "Admin")
+                    };
+                }
+
 
                 identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 outMsg = string.Empty;

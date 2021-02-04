@@ -6,7 +6,7 @@
 
 <html>
 <head>
-    <title>ChatApp</title>
+    <title>ChatApp</title>    
 </head>
 <body>
     <form asp-action="Index">
@@ -18,6 +18,13 @@
     <form asp-action="Logout">
         <input type="submit" value="ログアウト" />
     </form>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <form asp-action="UserList">
+            <input type="submit" value="ユーザー管理" />
+        </form>
+    }
+
     <div>
         <ul>
             @foreach (var messages in Model)
