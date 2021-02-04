@@ -38,7 +38,7 @@ namespace EChat.Controllers
             var userInfoList = ManagerDb.GetUserInfo((string)TempData["userId"]);
             var user = new User(userInfoList[0].UserId,
                                 userInfoList[0].UserName,
-                                userInfoList[0].PasswordType,
+                                1,
                                 userInfoList[0].PasswordSalt,
                                 ManageHash.GetHash(newPassword + userInfoList[0].PasswordSalt),
                                 userInfoList[0].IsAdministrator);

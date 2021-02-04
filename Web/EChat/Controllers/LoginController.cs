@@ -30,6 +30,7 @@ namespace EChat.Controllers
             }
             else if (outMsg == "ChangePassword")
             {
+                TempData["userId"] = userId;
                 return RedirectToAction("Index", "Password");
             }
 
@@ -48,7 +49,9 @@ namespace EChat.Controllers
         {
             if (string.IsNullOrEmpty(inputUserId) || string.IsNullOrEmpty(inputPass))
             {
+                identity = null;
                 outMsg = "IDかパスワードが入力されていません。";
+                return false;
             }
 
             var userInfoList = ManagerDb.GetUserInfo(inputUserId);
@@ -59,13 +62,13 @@ namespace EChat.Controllers
                 outMsg = "ユーザーIDが間違っているか、登録されていません。";
                 return false;
             }
-            else if (userInfoList[0].UserId == userInfoList[0].Password && userInfoList[0].Password == inputPass)
+            else if (userInfoList[0].PasswordType == 0 && userInfoList[0].Password == inputPass)
             {
                 identity = null;
                 outMsg = "ChangePassword";
                 return false;
             }
-            else if (userInfoList[0].UserId == userInfoList[0].Password && userInfoList[0].Password != inputPass)
+            else if (userInfoList[0].PasswordType == 0 && userInfoList[0].Password != inputPass)
             {
                 identity = null;
                 outMsg = "初期パスワードはユーザーIDを同じです。";
