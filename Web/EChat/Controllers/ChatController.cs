@@ -32,5 +32,10 @@ namespace EChat.Controllers
 
             return View(ManagerDb.GetMessages());
         }
+
+        public IActionResult Logout()
+        {
+            return RedirectToAction("Index","Login");
+        }
     }
 }

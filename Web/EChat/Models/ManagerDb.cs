@@ -31,34 +31,50 @@ namespace EChat.Models
 
         private static DataTable MsgDataTable { get; set; }
 
+        private static DataTable UserDataTable { get; set; }
+
         private static SqlTransaction SqlTransaction { get; set; }              
+
+        public static bool UpdateUserInfo(User userInfo)
+        {
+            UserDataTable.Rows[0]["UserId"] = userInfo.UserId;
+            UserDataTable.Rows[0]["UserName"] = userInfo.UserName;
+            UserDataTable.Rows[0]["PasswordType"] = userInfo.PasswordType;
+            UserDataTable.Rows[0]["PasswordSalt"] = userInfo.PasswordSalt;
+            UserDataTable.Rows[0]["Password"] = userInfo.Password;
+            UserDataTable.Rows[0]["IsAdministrator"] = userInfo.IsAdministrator;
+
+            return TryUpdateData(QUERYTYPE.Users, UserDataTable);
+        }
 
         public static bool InsertMessage(string msg, string userId)
         {
             var tempDt = MsgDataTable.Clone();
             string[] strValues = new string[] { msg, userId };
+            var nr = tempDt.NewRow();
+            nr[1] = DateTime.Now;
+            nr[2] = msg;
+            nr[3] = Environment.UserName;
+            nr[3] = userId;
+            tempDt.Rows.Add(nr);
+            //DataTable.ImportRow(inputRow);
 
-            return TryInsertData(QUERYTYPE.ChatLogs, tempDt, strValues);
+            return TryInsertData(QUERYTYPE.ChatLogs, nr);
         }
 
         /// <summary>
         /// ユーザーデータを読み込む
         /// </summary>
         /// <returns></returns>
-        public static List<UserInfo> GetUserInfo(string inputUserId)
+        public static List<User> GetUserInfo(string inputUserId)
         {
-            var dt = new DataTable();
-            dt = GetData(QUERYTYPE.GetUserInfo, "@userid", inputUserId);
-            List<UserInfo> userInfoList = new List<UserInfo>();
+            UserDataTable = GetData(QUERYTYPE.GetUserInfo, "@userid", inputUserId);
+            List<User> userInfoList = null;
             
-            if (dt != null)
+            if (UserDataTable.Rows.Count != 0)
             {
-                var tempUser = new UserInfo(dt.Rows[0][0].ToString(),
-                    dt.Rows[0][1].ToString(),
-                    (byte)dt.Rows[0][2],
-                    dt.Rows[0][3].ToString(),
-                    dt.Rows[0][4].ToString(),
-                    (bool)dt.Rows[0][5]);
+                userInfoList = new List<User>();
+                var tempUser = new User(UserDataTable.Rows[0][0].ToString(), UserDataTable.Rows[0][1].ToString(), (byte)UserDataTable.Rows[0][2], UserDataTable.Rows[0][3].ToString(), UserDataTable.Rows[0][4].ToString(), (bool)UserDataTable.Rows[0][5]);
                 userInfoList.Add(tempUser);
             }
 
@@ -142,7 +158,7 @@ namespace EChat.Models
         /// <param name="inputDt">データを追加する対象のデータテーブル</param>
         /// <param name="inputStrValues"></param>
         /// <returns></returns>
-        private static bool TryInsertData(QUERYTYPE inputType, DataTable inputDt, string[] inputStrValues)
+        private static bool TryInsertData(QUERYTYPE inputType, DataRow inputRow)
         {
             try
             {
@@ -158,24 +174,18 @@ namespace EChat.Models
 
                     try
                     {
-                        using (inputDt)
+                        using (var dt = new DataTable())
                         {
                             SqlDataAdapter.SelectCommand = SqlCommand;
-                            //SqlDataAdapter.Fill(DataTable);
+                            SqlDataAdapter.Fill(dt);
 
-                            var nr = inputDt.NewRow();
-                            nr[1] = DateTime.Now;
-                            nr[2] = inputStrValues[0];
-                            nr[3] = Environment.UserName;
-                            nr[3] = inputStrValues[1];
-                            inputDt.Rows.Add(nr);
-                            //DataTable.ImportRow(inputRow);
+                            dt.ImportRow(inputRow);
 
                             SqlCommandBuilder sqlBld = new SqlCommandBuilder();
                             sqlBld.DataAdapter = SqlDataAdapter;
                             SqlDataAdapter.InsertCommand = sqlBld.GetInsertCommand();
 
-                            SqlDataAdapter.Update(inputDt);
+                            SqlDataAdapter.Update(dt);
                             SqlTransaction.Commit();
                             return true;
                         }
@@ -198,7 +208,7 @@ namespace EChat.Models
             }
         }
 
-        private static void UpdateData()
+        private static bool TryUpdateData(QUERYTYPE inputType, DataTable inputDt)
         {
             try
             {
@@ -208,24 +218,24 @@ namespace EChat.Models
                 {
                     SqlConnection.Open();
                     SqlCommand.Connection = SqlConnection;
-                    SqlCommand.CommandText = ExcuteQuery;
-
+                    SqlCommand.CommandText = LoadQuery(inputType);
                     SqlTransaction = SqlConnection.BeginTransaction();
                     SqlCommand.Transaction = SqlTransaction;
 
                     try
                     {
-                        using (var dt = new DataTable())
+                        using (inputDt)
                         {
                             SqlDataAdapter.SelectCommand = SqlCommand;
-                            SqlDataAdapter.Fill(dt);
+                            //SqlDataAdapter.Fill(dt);
 
                             SqlCommandBuilder sqlBld = new SqlCommandBuilder();
                             sqlBld.DataAdapter = SqlDataAdapter;
                             SqlDataAdapter.UpdateCommand = sqlBld.GetUpdateCommand();
 
-                            SqlDataAdapter.Update(dt);
+                            SqlDataAdapter.Update(inputDt);
                             SqlTransaction.Commit();
+                            return true;
                         }
                     }
                     catch (SqlException)
@@ -241,6 +251,7 @@ namespace EChat.Models
             }
             catch (SqlException)
             {
+                return false;
                 throw;
             }
         }

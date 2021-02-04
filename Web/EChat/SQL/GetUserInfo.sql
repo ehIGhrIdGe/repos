@@ -8,4 +8,4 @@ SELECT
 FROM
 	[ChatApp].[dbo].[Users]
 WHERE
-    [UserId] = 'et'
+    [UserId] = @userid

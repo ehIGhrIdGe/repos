@@ -9,6 +9,15 @@
     <title>ChatApp</title>
 </head>
 <body>
+    <form asp-action="Index">
+        <div>
+            <input name="Msg" type="text" />
+        </div>
+        <input type="submit" value="更新" />
+    </form>
+    <form asp-action="Logout">
+        <input type="submit" value="ログアウト" />
+    </form>
     <div>
         <ul>
             @foreach (var messages in Model)
@@ -21,12 +30,5 @@
             }
         </ul>
     </div>
-    <hr />
-    <form asp-action="Index">
-        <div>
-            <input name="Msg" type="text" />
-        </div>
-        <input type="submit" value="更新" />
-    </form>
 </body>
 </html>

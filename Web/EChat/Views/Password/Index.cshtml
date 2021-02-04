@@ -3,14 +3,22 @@
     ViewData["Title"] = "Index";
 }
 
+<h6>パスワードを更新してください</h6>
+@if (!string.IsNullOrEmpty((string)TempData["outMsg"]))
+{
+    <hr />
+    <h6>@ViewBag.Message</h6>
+    <h6>もう一度入力してください。</h6>
+    <hr />
+}
 <form asp-action="Index">
     <div>
-        <input name="UserId" type="text" />
+        <input name="NewPassword" type="password" />
     </div>
     <div>
-        <input name="Password" type="password" />
+        <input name="ConfirmPassword" type="password" />
     </div>
-    <input type="submit" value="ログイン" />
+    <input type="submit" value="更新" />
 </form>
 
 

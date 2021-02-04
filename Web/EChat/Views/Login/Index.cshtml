@@ -1,9 +1,16 @@
-﻿@model UserInfo
+﻿@model User
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>@ViewBag.Message</h1>
+
+@if (!string.IsNullOrEmpty((string)TempData["outMsg"]))
+{
+    <h1>@ViewBag.Message</h1>
+    <h1>もう一度入力してください。</h1>
+    <hr />
+}
+
 <form asp-action="Index">
     <div>
         <input name="UserId" type="text" />

@@ -16,50 +16,79 @@ namespace EChat.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            ViewBag.Message = "get";
+            ViewBag.Message = (string)TempData["outMsg"];
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Index(string userId, string password)
-        {     
-            if (TryLogin(userId, password))            
+        {
+            if (TryLogin(userId, password, out string outMsg, out var identity))
             {
-                //Create Claims
-                var claims = new[]
-                {
-                    new Claim(ClaimTypes.Name, userId)
-                };
-
-                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
                 //sign in
                 await HttpContext.SignInAsync(new ClaimsPrincipal(identity));
             }
+            else if (outMsg == "ChangePassword")
+            {
+                return RedirectToAction("Index", "Password");
+            }
 
+            TempData["outMsg"] = outMsg;
             return RedirectToAction("Index", "Chat");
         }
 
-        private static bool TryLogin(string inputUserId, string inputPass)
+        /// <summary>
+        /// ログインが成功したかを boool で返す。
+        /// </summary>
+        /// <param name="inputUserId"></param>
+        /// <param name="inputPass"></param>
+        /// <param name="outMsg">Falseの場合、理由を文字列で返す。Trueの場合、string.Empty が入る。</param>
+        /// <returns></returns>
+        private static bool TryLogin(string inputUserId, string inputPass, out string outMsg, out ClaimsIdentity identity)
         {
-            if(string.IsNullOrEmpty(inputUserId) || string.IsNullOrEmpty(inputPass))
+            if (string.IsNullOrEmpty(inputUserId) || string.IsNullOrEmpty(inputPass))
             {
-                return false;
+                outMsg = "IDかパスワードが入力されていません。";
             }
 
             var userInfoList = ManagerDb.GetUserInfo(inputUserId);
 
-            if(userInfoList is null)
+            if (userInfoList is null)
             {
+                identity = null;
+                outMsg = "ユーザーIDが間違っているか、登録されていません。";
                 return false;
             }
+            else if (userInfoList[0].UserId == userInfoList[0].Password && userInfoList[0].Password == inputPass)
+            {
+                identity = null;
+                outMsg = "ChangePassword";
+                return false;
+            }
+            else if (userInfoList[0].UserId == userInfoList[0].Password && userInfoList[0].Password != inputPass)
+            {
+                identity = null;
+                outMsg = "初期パスワードはユーザーIDを同じです。";
+                return false;
+            }
+            else if (!ManageHash.CompareHashStr(ManageHash.GetHash(inputPass + userInfoList[0].PasswordSalt), userInfoList[0].Password))
+            {
+                identity = null;
+                outMsg = "パスワードが間違っています。";
+                return false;
+            }
+            else
+            {
+                //Create Claims
+                var claims = new[]
+                {
+                    new Claim(ClaimTypes.Name, userInfoList[0].UserId)
+                };
 
-            if(!ManageHash.CompareHash(ManageHash.GetHash(inputPass + userInfoList[0].PasswordSalt), userInfoList[0].Password))
-            {
-                return false;
+                identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                outMsg = string.Empty;
+                return true;
             }
-            
-            return true;
         }
     }
 }

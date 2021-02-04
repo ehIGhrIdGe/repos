@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EChat.Models
 {
-    public class UserInfo
+    public class User
     {
         [DisplayName("User Id")]
         public string UserId { get; private set; }
@@ -27,7 +27,7 @@ namespace EChat.Models
         [DisplayName("Is Administrator")]
         public bool IsAdministrator { get; private set; }
 
-        public UserInfo(string userId, string userName, byte passwordType, string passwordSalt, string password, bool isAdministrator)
+        public User(string userId, string userName, byte passwordType, string passwordSalt, string password, bool isAdministrator)
         {
             UserId = userId;
             UserName = userName;

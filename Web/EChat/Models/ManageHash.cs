@@ -28,7 +28,7 @@ namespace EChat.Models
         /// <param name="value1"></param>
         /// <param name="value2"></param>
         /// <returns></returns>
-        public static bool CompareHash(string value1, string value2)
+        public static bool CompareHashStr(string value1, string value2)
         {
             return Convert.FromBase64String(value1).SequenceEqual(Convert.FromBase64String(value2));
             //return value1.SequenceEqual(value2);
