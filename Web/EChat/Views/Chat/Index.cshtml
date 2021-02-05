@@ -6,7 +6,7 @@
 
 <html>
 <head>
-    <title>ChatApp</title>    
+    <title>ChatApp</title>
 </head>
 <body>
     <form asp-action="Index">
@@ -18,8 +18,9 @@
     <form asp-action="Logout">
         <input type="submit" value="ログアウト" />
     </form>
-    @if (User.Identity.IsAuthenticated)
+    @if (User.IsInRole("Admin"))
     {
+        <a asp-controller="UserList" asp-action="Index">ユーザー管理</a>
         <form asp-action="UserList">
             <input type="submit" value="ユーザー管理" />
         </form>

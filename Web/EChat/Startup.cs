@@ -39,7 +39,7 @@ namespace EChat
                     options.LoginPath = new PathString("/Login/Index");
 
                     //アクセスが禁止されているリソースにアクセスしようとしたときにリダイレクトする相対パス
-                    //options.AccessDeniedPath= new PathString(“/コントローラー/アクション名);
+                    options.AccessDeniedPath= new PathString("/Chat/Index");
                     
                     //認証Cookieの有効期限を設定する。
                     //options.ExpireTimeSpan= TimeSpan.FromMinutes(60);

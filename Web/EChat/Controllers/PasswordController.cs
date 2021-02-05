@@ -12,8 +12,10 @@ namespace EChat.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            var tempModel = new PasswordViewModel();
+            tempModel.OldPassword = (string)TempData.Peek("userId");
             ViewBag.Message = (string)TempData["outMsg"];
-            return View();
+            return View(tempModel);
         }
 
         [HttpPost]
@@ -24,34 +26,41 @@ namespace EChat.Controllers
                 return View(model);
             }
 
-            if (string.IsNullOrEmpty(model.NewPassword))
+            if (string.IsNullOrEmpty(model.OldPassword))
+            {
+                TempData["outMsg"] = "古いパスワードが入力されていません。";
+                return RedirectToAction("Index");
+            }
+            else if (string.IsNullOrEmpty(model.NewPassword))
             {
                 TempData["outMsg"] = "新しいパスワードが入力されていません。";
-                return View();
+                return RedirectToAction("Index");
             }
             else if (string.IsNullOrEmpty(model.ConfirmPassword))
             {
                 TempData["outMsg"] = "確認用パスワードが入力されていません。";
-                return View();
+                return RedirectToAction("Index");
             }
             else if(model.NewPassword.CompareTo(model.ConfirmPassword) != 0)
             {
                 TempData["outMsg"] = "新しいパスワードと確認用パスワードがが一致しません。";
-                return View();
+                return RedirectToAction("Index");
             }
 
-            var userInfoList = ManagerDb.GetUserInfo((string)TempData["userId"]);
-            var user = new User(userInfoList[0].UserId,
-                                userInfoList[0].UserName,
-                                1,
-                                userInfoList[0].PasswordSalt,
-                                ManageHash.GetHash(model.NewPassword + userInfoList[0].PasswordSalt),
-                                userInfoList[0].IsAdministrator);
+            var oldUserData = ManagerDb.GetUserData((string)TempData["userId"]);
+            var newUserData = new User(
+                                    oldUserData.UserId, 
+                                    oldUserData.UserName, 
+                                    1, 
+                                    oldUserData.PasswordSalt, ManageHash.GetHash(model.NewPassword + oldUserData.PasswordSalt),
+                                    oldUserData.IsAdministrator
+                                    );
 
-            if (!ManagerDb.UpdateUserInfo(user))
+            if (!ManagerDb.UpdateUser(newUserData))
             {
                 TempData["outMsg"] = "パスワードの更新に失敗しました。";
-                return View();
+                TempData["userId"] = newUserData.UserId;
+                return RedirectToAction("Index");
             }
 
             TempData["outMsg"] = "パスワードが更新されました。";

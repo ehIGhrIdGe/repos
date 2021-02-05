@@ -1,7 +1,53 @@
-﻿
+﻿@model User
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
+<h3>ユーザー情報更新</h3>
+<form asp-action="Index">
+    <div>
+        <label asp-for="UserId"></label>
+        <input asp-for="UserId" />
+        <span asp-validation-for="UserId"></span>
+    </div>
+    <div>
+        <label asp-for="UserName"></label>
+        <input asp-for="UserName" />
+        <span asp-validation-for="UserName"></span>
+    </div>
+    <div>
+        <label asp-for="PasswordType"></label>
+        <input asp-for="PasswordType" hidden="hidden" />
+        <input asp-for="PasswordType" disabled="disabled" />
+    </div>
+    <div>
+        <label asp-for="PasswordSalt"></label>
+        <input asp-for="PasswordSalt" hidden="hidden" />
+        <input asp-for="PasswordSalt" disabled="disabled" />
+        <span asp-validation-for="PasswordSalt"></span>
+    </div>
+    @if (!string.IsNullOrEmpty(Model.UserId))
+    {
+        <div>
+            <label asp-for="Password"></label>
+            <input asp-for="Password" hidden="hidden" />
+            <input asp-for="Password" disabled="disabled" />
+        </div>
+    }
+    else
+    {
+        <div>
+            <label asp-for="Password"></label>
+            <input asp-for="Password" disabled="disabled" />
+        </div>
+    }
+    <div>
+        <label asp-for="IsAdministrator"></label>
+        <input asp-for="IsAdministrator" />
+    </div>
+    <input type="submit" value="更新" />
+</form>
+<form asp-action="DeleteUser">
+    <input type="submit" value="削除" />
+</form>
+<a asp-controller="UserList" asp-action="Index">戻る</a>

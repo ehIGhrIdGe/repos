@@ -13,20 +13,20 @@ namespace EChat.Models
         [Required(AllowEmptyStrings = false ,ErrorMessage ="※必須入力です。")]
         public string UserId { get; private set; }
 
-        [DisplayName("User Name")]
+        [DisplayName("ユーサーネーム")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "※必須入力です。")]
         public string UserName { get; private set; }
 
-        [DisplayName("Password Type")]
+        [DisplayName("パスワードタイプ")]
         public byte PasswordType { get; private set; }
 
-        [DisplayName("Password Salt")]
+        [DisplayName("パスワードソルト")]
         public string PasswordSalt { get; private set; }
 
         [DisplayName("パスワード")]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "※必須入力です。")]
         public string Password { get; private set; }
 
-        [DisplayName("Is Administrator")]
+        [DisplayName("管理者権限")]
         public bool IsAdministrator { get; private set; }
 
         public User(string userId, string userName, byte passwordType, string passwordSalt, string password, bool isAdministrator)

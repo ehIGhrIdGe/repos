@@ -1,7 +1,34 @@
-﻿
+﻿@model UserListViewModel
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h3 class="information">@ViewBag.Message</h3>
+<a asp-controller="UserDetails" asp-action="Index">新規登録</a>
+<table>
+    <thead>
+        <tr>
+            <th><label asp-for="User.UserId"></label></th>
+            <th><label asp-for="User.UserName"></label></th>
+            <th><label asp-for="User.PasswordType"></label></th>
+            <th><label asp-for="User.PasswordSalt"></label></th>
+            <th><label asp-for="User.Password"></label></th>
+            <th><label asp-for="User.IsAdministrator"></label></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.UserList)
+        {
+        <tr>
+            <td>@user.UserId</td>
+            <td>@user.UserName</td>
+            <td>@user.PasswordType</td>
+            <td>@user.PasswordSalt</td>
+            <td>@user.Password</td>
+            <td>@user.IsAdministrator</td>
+            <td><a asp-controller="UserDetails" asp-action="Index" asp-route-id="@user.UserId">編集</a></td>            
+        </tr>
+        }
+    </tbody>
 
+</table>

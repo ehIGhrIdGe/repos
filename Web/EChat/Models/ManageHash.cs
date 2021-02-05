@@ -20,7 +20,26 @@ namespace EChat.Models
         {
             byte[] btPass = SHA256CSP.ComputeHash(Encoding.UTF8.GetBytes(value));
             return Convert.ToBase64String(btPass);
-        }        
+        }
+
+        /// <summary>
+        /// ランダムなハッシュ値を作成する
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string CreateHash()
+        {
+            byte[] btSalt = new byte[24];
+
+            using (RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider())
+            {
+                rngCsp.GetBytes(btSalt);
+            }
+
+            var hsSalt = Convert.ToBase64String(btSalt);
+            
+            return Convert.ToBase64String(btSalt);
+        }
 
         /// <summary>
         /// ２つのハッシュ化された文字列を比べ、同一であれば True を返す。

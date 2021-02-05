@@ -59,27 +59,27 @@ namespace EChat.Controllers
                 return false;
             }
 
-            var userInfoList = ManagerDb.GetUserInfo(inputUserId);
+            var user = ManagerDb.GetUserData(inputUserId);
 
-            if (userInfoList is null)
+            if (user is null)
             {
                 identity = null;
                 outMsg = "ユーザーIDが間違っているか、登録されていません。";
                 return false;
             }
-            else if (userInfoList[0].PasswordType == 0 && userInfoList[0].Password == inputPass)
+            else if (user.PasswordType == 0 && user.Password == inputPass)
             {
                 identity = null;
                 outMsg = "ChangePassword";
                 return false;
             }
-            else if (userInfoList[0].PasswordType == 0 && userInfoList[0].Password != inputPass)
+            else if (user.PasswordType == 0 && user.Password != inputPass)
             {
                 identity = null;
                 outMsg = "初期パスワードはユーザーIDを同じです。";
                 return false;
             }
-            else if (!ManageHash.CompareHashStr(ManageHash.GetHash(inputPass + userInfoList[0].PasswordSalt), userInfoList[0].Password))
+            else if (!ManageHash.CompareHashStr(ManageHash.GetHash(inputPass + user.PasswordSalt), user.Password))
             {
                 identity = null;
                 outMsg = "パスワードが間違っています。";
@@ -90,11 +90,11 @@ namespace EChat.Controllers
                 //Create Claims
                 var claims = new Claim[0];
 
-                if (!userInfoList[0].IsAdministrator)
+                if (!user.IsAdministrator)
                 {
                     claims = new[]
                     {
-                        new Claim(ClaimTypes.Name, userInfoList[0].UserId),
+                        new Claim(ClaimTypes.Name, user.UserId),
                         new Claim(ClaimTypes.Role, "People")
                     };
                 }
@@ -102,7 +102,7 @@ namespace EChat.Controllers
                 {
                     claims = new[]
                     {
-                        new Claim(ClaimTypes.Name, userInfoList[0].UserId),
+                        new Claim(ClaimTypes.Name, user.UserId),
                         new Claim(ClaimTypes.Role, "Admin")
                     };
                 }

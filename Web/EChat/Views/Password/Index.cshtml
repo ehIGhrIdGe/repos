@@ -3,14 +3,19 @@
     ViewData["Title"] = "Index";
 }
 
-<h5>パスワードを更新してください</h5>
 @if (!string.IsNullOrEmpty((string)TempData["outMsg"]))
 {
-    <h5>@ViewBag.Message</h5>
-    <h5>もう一度入力してください。</h5>
+    <h3 class="information">@ViewBag.Message</h3>
+    <h3>もう一度入力してください。</h3>
     <hr />
 }
+<h3>パスワードを更新してください</h3>
 <form asp-action="Index">
+    <div>
+        <label asp-for="OldPassword"></label>
+        <input name="OldPassword" type="password" value="@Model.OldPassword" />
+        <span asp-validation-for="OldPassword"></span>
+    </div>
     <div>
         <label asp-for="NewPassword"></label>
         <input name="NewPassword" type="password" />
@@ -23,5 +28,3 @@
     </div>
     <input type="submit" value="更新" />
 </form>
-
-
