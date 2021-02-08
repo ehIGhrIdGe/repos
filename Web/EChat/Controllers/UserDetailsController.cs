@@ -50,7 +50,17 @@ namespace EChat.Controllers
         
         public IActionResult DeleteUser()
         {
+            
             TempData["outMsg"] = ManagerDb.DeleteUserData((string)TempData["userId"]) ? "ユーザー情報を削除しました。" : "ユーザー情報の削除に失敗しました。";
+            return RedirectToAction("Index", "UserList");
+        }
+
+        public IActionResult PasswordReset()
+        {
+            var oldUserData = ManagerDb.GetUserData((string)TempData["userId"]);
+            var newUserData = new User(oldUserData.UserId, oldUserData.UserName, 0, ManageHash.CreateHash(), oldUserData.UserId, oldUserData.IsAdministrator);
+
+            TempData["outMsg"] = ManagerDb.UpdateUser(newUserData) ? "パスワードをリセットしました。次回ログイン時に変更。" : "パスワードのリセットに失敗しました。";
             return RedirectToAction("Index", "UserList");
         }
     }

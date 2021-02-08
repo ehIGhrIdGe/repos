@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EChat.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EChat
 {
@@ -26,7 +27,11 @@ namespace EChat
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(options => options.EnableEndpointRouting = false);
+            services.AddMvc(options => 
+            {
+                options.EnableEndpointRouting = false;
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
 
             ManagerDb.Configuration = Configuration;
 
@@ -57,6 +62,15 @@ namespace EChat
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                //例外処理用のページ
+                app.UseExceptionHandler("/コントローラー名/アクション名");
+            }
+
+            //500 以外の例外が発生した場合に指定のページへ遷移させる。
+            //{0} にステータスコードが入ってくる。
+            app.UseStatusCodePagesWithReExecute("/コントローラー名/アクション名{0}");
 
             app.UseRouting();
 

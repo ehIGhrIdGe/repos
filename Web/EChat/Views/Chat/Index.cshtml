@@ -21,11 +21,8 @@
     @if (User.IsInRole("Admin"))
     {
         <a asp-controller="UserList" asp-action="Index">ユーザー管理</a>
-        <form asp-action="UserList">
-            <input type="submit" value="ユーザー管理" />
-        </form>
     }
-
+    <a asp-controller="Profile" asp-action="Index" asp-route-id="@User.Identity.Name">プロフィール編集</a>
     <div>
         <ul>
             @foreach (var messages in Model)
