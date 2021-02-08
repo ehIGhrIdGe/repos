@@ -8,15 +8,24 @@ using System.Threading.Tasks;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Logging;
 
 namespace EChat.Controllers
 {
     [Authorize(Roles = "Admin, People")]
     public class ChatController : Controller
     {
+        private readonly ILogger<ChatController> _logger;
+
+        public ChatController(ILogger<ChatController> logger)
+        {
+            _logger = logger;
+        }
+
         [HttpGet]
         public IActionResult Index()
         {
+            _logger.LogInformation("ログ書き込みサンプル");
             return View(ManagerDb.GetMessages());
         }
 
