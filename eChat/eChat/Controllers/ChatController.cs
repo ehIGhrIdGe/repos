@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using eChat.Models;
 
 namespace eChat.Controllers
 {
@@ -12,6 +13,12 @@ namespace eChat.Controllers
         {
             ViewBag.Msg = "Let's enjoy chat!";
             return View();
+        }
+
+        public IActionResult ShowChat()
+        {
+            ViewBag.Msg = "Let's enjoy chat!";
+            return View(DbUtil.GetMessages());
         }
     }
 }

@@ -39,19 +39,32 @@ namespace eChat.Models
             return connection;
         }
 
-        public void GetMessages()
+        public static ChatLogs GetMessages()
         {
             SqlConnection conn;
             using (GetConnection(out conn))
             {
-                using (IDbTransaction trn = conn.BeginTransaction())
+                using (SqlTransaction trn = conn.BeginTransaction())
                 {
                     try
                     {
-                        var cmd = new SqlCommand("SELECT * FROM [ChatLogs]", conn);
-                        var ada = new SqlDataAdapter(cmd);
-                        var chatLogsDt = new DataTable();
-                        ada.Fill(chatLogsDt);
+                        using (var cmd = new SqlCommand("SELECT * FROM [ChatLogs]", conn, trn))
+                        {
+                            using (var ada = new SqlDataAdapter(cmd))
+                            {
+                                var chatLogsDt = new DataTable();
+                                ada.Fill(chatLogsDt);
+
+                                var keyValues = new Dictionary<string, ChatMessage>();
+                                foreach (DataRow row in chatLogsDt.Rows)
+                                {
+                                    keyValues.Add(row["UserId"].ToString(), new ChatMessage((DateTime)row["PostAt"], row["Message"].ToString(), row["Name"].ToString()));
+                                }
+                                var chatLogs = new ChatLogs(keyValues);
+
+                                return chatLogs;
+                            }
+                        }                                                                            
                     }
                     finally
                     {

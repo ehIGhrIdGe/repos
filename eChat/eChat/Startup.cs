@@ -58,7 +58,7 @@ namespace eChat
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Chat}/{action=Index}/{id?}");
+                    pattern: "{controller=Chat}/{action=ShowChat}/{id?}");
             });
         }
     }
